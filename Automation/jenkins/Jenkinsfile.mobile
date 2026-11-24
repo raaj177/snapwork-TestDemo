@@ -54,7 +54,6 @@ pipeline {
     string(name: 'TEST_ID', defaultValue: '', description: 'Optional testcase ID(s), comma-separated, e.g. TC_US002_025 (overrides TEST_SUITE)')
     string(name: 'SPEC', defaultValue: '', description: 'Optional spec file, e.g. src/tests/smoke/<WorkbookName>/US002.test.ts (overrides TEST_SUITE; combines with TEST_ID)')
     choice(name: 'PLATFORM', choices: ['android', 'ios'], description: 'Platform to run')
-    choice(name: 'TEST_ENV', choices: ['qa', 'uat', 'staging'], description: 'Target environment (config/environments)')
 
     // ---- Device ----
     string(name: 'ANDROID_HOME', defaultValue: '', description: 'Android: SDK folder that contains platform-tools/adb (empty = the agent\'s ANDROID_HOME / ANDROID_SDK_ROOT)')
@@ -75,7 +74,7 @@ pipeline {
   environment {
     CI = 'true'
     PLATFORM = "${params.PLATFORM}"
-    TEST_ENV = "${params.TEST_ENV}"
+    TEST_ENV = 'qa'   // the project's only environment
     LOG_LEVEL = 'info'
   }
 

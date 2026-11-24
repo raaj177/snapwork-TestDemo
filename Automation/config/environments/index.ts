@@ -1,6 +1,4 @@
 import { qaConfig } from './qa.config';
-import { uatConfig } from './uat.config';
-import { stagingConfig } from './staging.config';
 import { env } from '../env';
 import { logger, describeError } from '../../src/utils/Logger';
 
@@ -15,7 +13,8 @@ export interface EnvironmentConfig {
 export function environmentConfig(name: string = env.TEST_ENV): EnvironmentConfig {
     log.debug(`Resolving environment config for ${name}`);
     try {
-        const all: Record<string, EnvironmentConfig> = { qa: qaConfig, uat: uatConfig, staging: stagingConfig };
+        // This project has one environment (qa). Add another <name>.config.ts here only when one exists.
+        const all: Record<string, EnvironmentConfig> = { qa: qaConfig };
         const found = all[name];
         if (!found) throw new Error(`Unknown TEST_ENV "${name}"`);
         log.debug(`Environment config resolved: ${found.name}`);

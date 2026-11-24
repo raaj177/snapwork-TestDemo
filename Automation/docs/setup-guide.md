@@ -34,7 +34,7 @@ npm run lint
 | Variable | Purpose | Default |
 | --- | --- | --- |
 | `PLATFORM` | `android` / `ios` | `android` |
-| `TEST_ENV` | `qa` / `uat` / `staging` | `qa` |
+| `TEST_ENV` | `qa` (the only environment) | `qa` |
 | `APPIUM_HOST`, `APPIUM_PORT` | local host starts Appium through `@wdio/appium-service` | `127.0.0.1`, `4723` |
 | `APP_PACKAGE`, `APP_ACTIVITY`, `START_ACTIVITY` | Android app | empty (deferred) |
 | `BUNDLE_ID` | iOS app | empty (deferred) |

@@ -24,7 +24,8 @@ const str = (def = '') =>
 
 export const EnvSchema = z.object({
     PLATFORM: z.enum(['android', 'ios']).default('android'),
-    TEST_ENV: z.enum(['qa', 'uat', 'staging']).default('qa'),
+    /** The one environment of this project (config/environments/qa.config.ts). */
+    TEST_ENV: z.enum(['qa']).default('qa'),
     APPIUM_HOST: str('127.0.0.1'),
     APPIUM_PORT: int(4723),
     DEVICE_UDID: str(),
