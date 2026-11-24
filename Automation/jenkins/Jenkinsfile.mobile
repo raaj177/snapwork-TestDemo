@@ -93,7 +93,7 @@ pipeline {
           if (sdk) { env.ANDROID_HOME = sdk; env.ANDROID_SDK_ROOT = sdk }
         }
         dir(AUTOMATION_DIR) {
-          run 'npm run clean --if-present'
+          script { run 'npm run clean --if-present' }
         }
       }
     }
@@ -118,7 +118,7 @@ pipeline {
     stage('Install') {
       steps {
         dir(AUTOMATION_DIR) {
-          run 'npm ci'
+          script { run 'npm ci' }
         }
       }
     }
@@ -126,8 +126,10 @@ pipeline {
     stage('Type-check and lint') {
       steps {
         dir(AUTOMATION_DIR) {
-          run 'npm run typecheck'
-          run 'npm run lint'
+          script {
+            run 'npm run typecheck'
+            run 'npm run lint'
+          }
         }
       }
     }
