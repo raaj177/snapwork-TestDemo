@@ -122,7 +122,13 @@ pipeline {
     stage('Install') {
       steps {
         dir(AUTOMATION_DIR) {
-          script { run 'npm ci' }
+          // A stalled registry download must not hold the phone for the whole build timeout: cache first,
+          // 10 minutes per attempt, one retry.
+          retry(2) {
+            timeout(time: 10, unit: 'MINUTES') {
+              script { run 'npm ci --prefer-offline --no-audit --no-fund' }
+            }
+          }
         }
       }
     }
