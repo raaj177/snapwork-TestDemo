@@ -156,6 +156,45 @@ export class StartService {
         }
     }
 
+    /** Relaunches the app (a single, clean screen stack) and opens the Customer ID login view; never reuses the screen. */
+    async openCustomerIdLoginByRelaunch(): Promise<void> {
+        this.logger.info('Opening the Customer ID login view through a relaunch');
+        try {
+            let screen = await this.relaunchToStartScreen();
+            if (screen === 'kyc') {
+                await this.kycPromptPage.tapDoItLater();
+                screen = 'dashboard';
+            }
+            if (screen === 'dashboard') {
+                await this.logoutFromDashboard();
+                screen = 'returning';
+            }
+            if (screen === 'returning') await this.switchAccountToLogin();
+            await this.loginPage.verifyCustomerIdView();
+            this.logger.info('Customer ID login view open after a relaunch');
+        } catch (error) {
+            this.logger.error(`Opening the login view through a relaunch failed: ${describeError(error)}`);
+            throw error;
+        }
+    }
+
+    /** The in-place reset of the login screen; false (caller relaunches) when it is not clean or a step of it fails. */
+    async tryResetLoginInPlace(): Promise<boolean> {
+        this.logger.info('Trying to reuse the login screen without a relaunch');
+        try {
+            try {
+                return await this.loginPage.resetToCleanCustomerIdView();
+            } catch (resetError) {
+                // Not a test failure: the screen was mid-transition; a relaunch gives a known clean state instead.
+                this.logger.warn(`Reusing the login screen failed (${describeError(resetError)}): relaunching instead`);
+                return false;
+            }
+        } catch (error) {
+            this.logger.error(`Trying to reuse the login screen failed: ${describeError(error)}`);
+            throw error;
+        }
+    }
+
     /** Close and relaunch the app and return the start screen it shows. */
     async relaunchToStartScreen(): Promise<StartScreen> {
         this.logger.info('Relaunching the app to a start screen');
@@ -179,7 +218,7 @@ export class StartService {
         try {
             let screen = await this.currentStartScreen();
             if (screen === 'login') {
-                if (await this.loginPage.resetToCleanCustomerIdView()) {
+                if (await this.tryResetLoginInPlace()) {
                     await this.loginPage.verifyCustomerIdView();
                     this.logger.info('Customer ID login view ready (reused, no relaunch)');
                     return;
@@ -227,9 +266,19 @@ export class StartService {
             if (this.loginUnavailable) throw new BlockedError(this.loginUnavailable);
             const user = fixtures.user('normalUser');
             if (screen === 'returning') await this.switchAccountToLogin();
-            else if (!(await this.loginPage.resetToCleanCustomerIdView())) await this.openCustomerIdLogin();
+            else if (!(await this.tryResetLoginInPlace())) await this.openCustomerIdLogin();
             await this.loginPage.verifyCustomerIdView();
-            await this.loginPage.loginWithCustomerId(user.username, user.password ?? '');
+            try {
+                await this.loginPage.loginWithCustomerId(user.username, user.password ?? '');
+            } catch (formError) {
+                // After a logout the app can keep two login screens stacked: the fields typed into are not the visible
+                // ones and Login stays disabled. Login was NOT tapped (no failed attempt), so relaunch for a single clean
+                // login screen and fill the form once more.
+                if (!/Login was not tapped/.test(describeError(formError))) throw formError;
+                this.logger.warn(`Login form not usable (${describeError(formError)}): relaunching for a clean login screen`);
+                await this.openCustomerIdLoginByRelaunch();
+                await this.loginPage.loginWithCustomerId(user.username, user.password ?? '');
+            }
             const outcome = await this.waitForLoginOutcome();
             if (outcome === 'failed') {
                 // Never tap "Try Again" (it would submit again): the next test relaunches, and no later test logs in.
@@ -332,7 +381,8 @@ export class StartService {
         this.logger.info('Relaunching the app after logout');
         try {
             await appService.closeAndRelaunch(async () => {
-                await this.returningLoginPage.verifyShownForUserCode(userCode);
+                // After Back the activity is closed: reopening is a cold start that can show a blank screen for a while.
+                await this.returningLoginPage.verifyShownForUserCode(userCode, TIMEOUTS.appLaunch);
             });
             await this.dashboardPage.verifyNotShown();
             this.logger.info('Relaunch showed the login screen only');
@@ -348,7 +398,8 @@ export class StartService {
         try {
             await appService.pressBack();
             await appService.activateAndCheck(async () => {
-                await this.returningLoginPage.verifyShownForUserCode(userCode);
+                // After Back the activity is closed: reopening is a cold start that can show a blank screen for a while.
+                await this.returningLoginPage.verifyShownForUserCode(userCode, TIMEOUTS.appLaunch);
             });
             await this.dashboardPage.verifyNotShown();
             expectTrue(

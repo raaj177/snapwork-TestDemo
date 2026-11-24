@@ -44,10 +44,11 @@ export abstract class ReturningLoginPage extends BasePage {
     // ---- verify methods ----
 
     /** The returning-user screen shows the remembered user code (a Customer ID/Trade Code from .env). */
-    async verifyShownForUserCode(userCode: string): Promise<void> {
+    /** timeout: the heading's wait; use TIMEOUTS.appLaunch right after a (re)start of the app (cold start of the debug build). */
+    async verifyShownForUserCode(userCode: string, timeout: number = SCREEN_WAIT): Promise<void> {
         this.logger.info(`Verifying the returning-user login for "${maskValue(userCode)}"`);
         try {
-            await this.expectDisplayed(this.welcomeBackHeading, 'the "WELCOME BACK!" heading', SCREEN_WAIT);
+            await this.expectDisplayed(this.welcomeBackHeading, 'the "WELCOME BACK!" heading', timeout);
             await this.expectDisplayed(this.byLabel(userCode), 'the remembered user code');
             this.logger.info('Returning-user login verified');
         } catch (error) {

@@ -24,7 +24,7 @@ export abstract class DashboardPage extends BasePage {
     async tapMoreTab(): Promise<void> {
         this.logger.info('Opening the More tab');
         try {
-            await this.tap(this.moreTab, 'the More tab');
+            await this.withKycPromptHandled('Opening the More tab', () => this.tap(this.moreTab, 'the More tab'));
             this.logger.info('More tab opened');
         } catch (error) {
             this.logger.error(`Failed to open the More tab: ${describeError(error)}`);
@@ -36,7 +36,7 @@ export abstract class DashboardPage extends BasePage {
     async openDashboardTab(): Promise<void> {
         this.logger.info('Opening the Dashboard tab');
         try {
-            await this.tap(this.dashboardTab, 'the Dashboard tab');
+            await this.withKycPromptHandled('Opening the Dashboard tab', () => this.tap(this.dashboardTab, 'the Dashboard tab'));
             await this.verifyVisible();
             this.logger.info('Dashboard tab open');
         } catch (error) {
@@ -49,8 +49,10 @@ export abstract class DashboardPage extends BasePage {
     async verifyVisible(): Promise<void> {
         this.logger.info('Verifying the Dashboard');
         try {
-            await this.expectDisplayed(this.title, 'the Dashboard header', BACKEND_WAIT);
-            await this.expectDisplayed(this.moreTab, 'the More tab');
+            await this.withKycPromptHandled('Verifying the Dashboard', async () => {
+                await this.expectDisplayed(this.title, 'the Dashboard header', BACKEND_WAIT);
+                await this.expectDisplayed(this.moreTab, 'the More tab');
+            });
             this.logger.info('Dashboard verified');
         } catch (error) {
             this.logger.error(`Dashboard verification failed: ${describeError(error)}`);

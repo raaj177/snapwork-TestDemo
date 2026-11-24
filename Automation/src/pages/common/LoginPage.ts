@@ -157,13 +157,39 @@ export abstract class LoginPage extends BasePage {
         try {
             await this.enterCustomerId(customerId);
             await this.verifyCustomerIdValue(customerId);
-            await this.enterPassword(password);
-            const typed = ((await this.passwordInput().getText()) ?? '').length;
-            if (typed !== password.length) {
-                this.logger.warn(`The Password field holds ${typed} of ${password.length} character(s) after typing: typing it again`);
-                await this.enterPassword(password);
+            // Type, close the keyboard, then confirm the form exactly as Login will see it. Closing the keyboard can cost the
+            // Flutter password field its text, so the form is checked AFTER the keyboard is closed and typed again once.
+            for (let attempt = 1; attempt <= 2; attempt += 1) {
+                if (attempt === 1) await this.enterPassword(password);
+                else {
+                    // Second attempt with real key presses: the first typing reached only the accessibility layer.
+                    await this.typeWithKeys(this.customerIdInput, customerId, 'the Customer ID/Trade Code field');
+                    await this.typeWithKeys(this.passwordInput, password, 'the Password field', true);
+                }
+                await this.hideKeyboard();
+                const customerIdOk = ((await this.customerIdInput().getText()) ?? '') === customerId;
+                const typed = ((await this.passwordInput().getText()) ?? '').length;
+                // Right after a logout the app can rebuild the login screen and clear the form a moment later, so Login
+                // must also be enabled (both fields really filled) before it is tapped.
+                const enabled =
+                    customerIdOk &&
+                    typed === password.length &&
+                    (await this.loginButton()
+                        .waitForEnabled({ timeout: 3000, interval: 500 })
+                        .then(() => true)
+                        .catch(() => false));
+                if (enabled) break;
+                if (attempt === 2)
+                    throw new Error(
+                        `The login form did not keep its values (Customer ID kept: ${customerIdOk}, Password ${typed} of ${password.length} character(s), Login enabled: ${enabled}); Login was not tapped`,
+                    );
+                this.logger.warn(
+                    `Login form not ready (Customer ID kept ${customerIdOk}, Password ${typed} of ${password.length} character(s), Login enabled ${enabled}): typing both fields again with key presses`,
+                );
             }
+            await this.verifyCustomerIdValue(customerId);
             await this.verifyPasswordLength(password.length);
+            await this.verifyLoginEnabled();
             await this.tapLogin();
             this.logger.info('Customer ID login submitted');
         } catch (error) {

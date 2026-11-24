@@ -6,6 +6,9 @@
 import { LoginPage } from '../common/LoginPage';
 import type { ElementLocator } from '../common/BasePage';
 
+/** The identifier label of the visible login form (Customer ID or Mobile number view). */
+const LOGIN_FORM_LABEL = '//android.view.View[@content-desc="Customer ID/Trade Code" or @content-desc="Mobile number"]';
+
 export class AndroidLoginPage extends LoginPage {
     readonly customerIdTab: ElementLocator;
     readonly mobileNoTab: ElementLocator;
@@ -23,6 +26,14 @@ export class AndroidLoginPage extends LoginPage {
         this.mobileNumberInput = this.byXPath(
             '//android.view.View[@content-desc="Mobile number"]/following-sibling::android.widget.EditText[1]',
         );
-        this.passwordInput = this.byXPath('//android.view.View[@content-desc="Password"]/following-sibling::android.widget.EditText[1]');
+        // After Switch Account the login form is opened ON TOP of the returning-user screen, which stays in the hierarchy
+        // and has its own "Password" field and Login button. Both are anchored to the login form (they follow the
+        // Customer ID / Mobile number label, a sibling in the same form), so the hidden screen's controls are never used.
+        this.passwordInput = this.byXPath(
+            `${LOGIN_FORM_LABEL}/following-sibling::android.view.View[@content-desc="Password"][1]/following-sibling::android.widget.EditText[1]`,
+        );
+        (this as { loginButton: ElementLocator }).loginButton = this.byXPath(
+            `${LOGIN_FORM_LABEL}/following-sibling::android.widget.Button[@content-desc="Login" or @text="Login"][1]`,
+        );
     }
 }

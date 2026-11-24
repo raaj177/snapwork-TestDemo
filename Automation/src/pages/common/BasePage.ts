@@ -88,6 +88,31 @@ export abstract class BasePage {
     }
 
     /** Types a value; a secret is never logged and is registered with the Redactor. */
+    /**
+     * Types with real key presses, one character at a time, as a person would. Fallback for Flutter fields: the normal
+     * type() sets the text through accessibility, which now and then reaches only the accessibility layer and not the
+     * app's own field (the field reads back filled while the app sees it empty).
+     */
+    async typeWithKeys(locator: ElementLocator, value: string, description: string, secret = false): Promise<void> {
+        this.logger.info(`Typing into ${description} with key presses${secret ? ' (secret)' : ''}`);
+        try {
+            if (secret) registerSensitive(value);
+            const el = locator();
+            await el.waitForDisplayed({
+                timeout: TIMEOUTS.standard,
+                interval: TIMEOUTS.pollInterval,
+                timeoutMsg: `${description} was not displayed`,
+            });
+            await el.click();
+            await el.clearValue();
+            await driver.keys(value.split(''));
+            this.logger.info(`Typed into ${description} with key presses`);
+        } catch (error) {
+            this.logger.error(`Failed to type into ${description} with key presses: ${describeError(error)}`);
+            throw error;
+        }
+    }
+
     async type(locator: ElementLocator, value: string, description: string, secret = false): Promise<void> {
         this.logger.info(`Typing into ${description}${secret ? ' (secret)' : ''}`);
         try {
@@ -248,6 +273,60 @@ export abstract class BasePage {
             this.logger.info(`${description} is absent`);
         } catch (error) {
             this.logger.error(`Check failed: ${describeError(error)}`);
+            throw error;
+        }
+    }
+
+    /**
+     * The KYC "Get Started on your Investment Journey!" bottom sheet can slide up at any moment after login (on the
+     * Dashboard, the More tab, ...) and cover the tab bar and the page. Closes it with "I'll Do It Later" when it is shown
+     * within ms; returns whether it was closed. Logged-in pages call it before their actions and checks.
+     */
+    async dismissKycPromptIfShown(ms = 1): Promise<boolean> {
+        this.logger.info('Checking for the KYC prompt');
+        try {
+            const later = this.byRole('button', "I'll Do It Later");
+            if (!(await this.isDisplayedWithin(later, ms, 'the KYC prompt'))) return false;
+            // The sheet animates in and out: the button can vanish between "shown" and the click. A failed click is
+            // checked again; a prompt that is gone counts as closed, one still shown is clicked once more.
+            for (let attempt = 1; attempt <= 2; attempt += 1) {
+                const clicked = await later()
+                    .click()
+                    .then(() => true)
+                    .catch(() => false);
+                const gone = await later()
+                    .waitForDisplayed({ timeout: TIMEOUTS.short, interval: TIMEOUTS.pollInterval, reverse: true })
+                    .then(() => true)
+                    .catch(() => false);
+                if (gone) break;
+                if (attempt === 2) throw new Error(`the KYC prompt stayed open (last click ${clicked ? 'done' : 'not possible'})`);
+                this.logger.warn('The KYC prompt is still shown after the click: clicking "I\'ll Do It Later" again');
+            }
+            this.logger.info('KYC prompt closed with "I\'ll Do It Later"');
+            return true;
+        } catch (error) {
+            this.logger.error(`Closing the KYC prompt failed: ${describeError(error)}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Runs a logged-in check; when it fails because the KYC prompt slid up over the page, closes the prompt and runs
+     * the check once more. Any other failure is rethrown unchanged.
+     */
+    async withKycPromptHandled<T>(description: string, check: () => Promise<T>): Promise<T> {
+        this.logger.info(`${description} (KYC prompt handled)`);
+        try {
+            await this.dismissKycPromptIfShown();
+            try {
+                return await check();
+            } catch (first) {
+                if (!(await this.dismissKycPromptIfShown(TIMEOUTS.pollInterval))) throw first;
+                this.logger.warn(`${description}: the KYC prompt covered the page; checking again after closing it`);
+                return await check();
+            }
+        } catch (error) {
+            this.logger.error(`${description} failed: ${describeError(error)}`);
             throw error;
         }
     }

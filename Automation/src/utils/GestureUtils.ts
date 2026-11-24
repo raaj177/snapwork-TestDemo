@@ -36,7 +36,13 @@ export class GestureUtils {
         log.info('Hiding the keyboard');
         try {
             if (await driver.isKeyboardShown()) {
-                await driver.hideKeyboard();
+                // The IME "Done" action first: driver.hideKeyboard() presses Back on Android, and in this Flutter app Back can
+                // leave the form (an earlier login screen with an empty password comes back). Done only closes the keyboard.
+                await driver.execute('mobile: performEditorAction', { action: 'done' });
+                if (await driver.isKeyboardShown()) {
+                    log.warn('The keyboard stayed open after Done: closing it with Back');
+                    await driver.hideKeyboard();
+                }
                 log.info('Keyboard hidden');
             } else {
                 log.info('Keyboard was not shown');

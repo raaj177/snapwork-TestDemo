@@ -22,7 +22,7 @@ export class MorePage extends BasePage {
     async tapSettings(): Promise<void> {
         this.logger.info('Opening Settings');
         try {
-            await this.tap(this.settingsRow, 'the Settings row');
+            await this.withKycPromptHandled('Opening Settings', () => this.tap(this.settingsRow, 'the Settings row'));
             this.logger.info('Settings opened');
         } catch (error) {
             this.logger.error(`Failed to open Settings: ${describeError(error)}`);
@@ -34,11 +34,13 @@ export class MorePage extends BasePage {
     async tapLogout(): Promise<void> {
         this.logger.info('Tapping Logout on the More tab');
         try {
-            await this.expectDisplayed(this.heading, 'the More heading', SCREEN_WAIT);
-            if (!(await this.isDisplayedWithin(this.logoutRow, 1000, 'the Logout row'))) {
-                await this.scrollTo(this.logoutRow, 'the Logout row');
-            }
-            await this.tap(this.logoutRow, 'the Logout row');
+            await this.withKycPromptHandled('Tapping Logout', async () => {
+                await this.expectDisplayed(this.heading, 'the More heading', SCREEN_WAIT);
+                if (!(await this.isDisplayedWithin(this.logoutRow, 1000, 'the Logout row'))) {
+                    await this.scrollTo(this.logoutRow, 'the Logout row');
+                }
+                await this.tap(this.logoutRow, 'the Logout row');
+            });
             this.logger.info('Logout row tapped');
         } catch (error) {
             this.logger.error(`Failed to tap Logout: ${describeError(error)}`);
@@ -49,8 +51,10 @@ export class MorePage extends BasePage {
     async verifyVisible(): Promise<void> {
         this.logger.info('Verifying the More tab');
         try {
-            await this.expectDisplayed(this.heading, 'the More heading', SCREEN_WAIT);
-            await this.expectDisplayed(this.settingsRow, 'the Settings row');
+            await this.withKycPromptHandled('Verifying the More tab', async () => {
+                await this.expectDisplayed(this.heading, 'the More heading', SCREEN_WAIT);
+                await this.expectDisplayed(this.settingsRow, 'the Settings row');
+            });
             this.logger.info('More tab verified');
         } catch (error) {
             this.logger.error(`More tab verification failed: ${describeError(error)}`);
@@ -62,11 +66,13 @@ export class MorePage extends BasePage {
     async verifyLogoutOptionAvailable(): Promise<void> {
         this.logger.info('Verifying the Logout option is available on the More tab');
         try {
-            await this.expectDisplayed(this.heading, 'the More heading', SCREEN_WAIT);
-            if (!(await this.isDisplayedWithin(this.logoutRow, 1000, 'the Logout row'))) {
-                await this.scrollTo(this.logoutRow, 'the Logout row');
-            }
-            await this.expectDisplayed(this.logoutRow, 'the Logout option');
+            await this.withKycPromptHandled('Verifying the Logout option', async () => {
+                await this.expectDisplayed(this.heading, 'the More heading', SCREEN_WAIT);
+                if (!(await this.isDisplayedWithin(this.logoutRow, 1000, 'the Logout row'))) {
+                    await this.scrollTo(this.logoutRow, 'the Logout row');
+                }
+                await this.expectDisplayed(this.logoutRow, 'the Logout option');
+            });
             this.logger.info('Logout option shown (not tapped)');
         } catch (error) {
             this.logger.error(`Logout option check failed: ${describeError(error)}`);
