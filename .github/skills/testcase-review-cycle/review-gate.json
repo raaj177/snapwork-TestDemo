@@ -1,0 +1,7 @@
+{
+  "_comment": "Review gate for testcase-review-cycle (orchestrator Phase 3). A reviewed version passes only when BOTH coverage figures are >= their minimum. Change the numbers here; both skills read this file.",
+  "full_coverage_min_percent": 90,
+  "risk_weighted_coverage_min_percent": 90,
+  "max_revisions_per_file": 3,
+  "copy_to_testcases_when_passed": "automatic"
+}

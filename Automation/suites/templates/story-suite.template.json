@@ -1,0 +1,6 @@
+{
+    "story": "{{StoryId}}",
+    "platform": "{{android|ios|web}}",
+    "spec": "src/tests/regression/{{WorkbookFolder}}/{{StoryLabel}}. {{Story title}}.test.ts",
+    "ids": ["{{TC_ID_1}}", "{{TC_ID_2}}"]
+}

@@ -1,0 +1,5 @@
+{
+    "common": { "users": {}, "messages": {}, "values": {} },
+    "overrides": { "android": {}, "ios": {} },
+    "environments": {}
+}

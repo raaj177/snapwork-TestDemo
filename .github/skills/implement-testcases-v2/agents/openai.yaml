@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Testcases v2"
+  short_description: "Write TypeScript/WebdriverIO automation for a story, then print the command that runs it and updates the workbook"
+  default_prompt: "Use $implement-testcases-v2 to automate a user story from an input testcase workbook. First ask me which platform (Android or iOS), which workbook and which story (or testcase IDs, or all stories) to work on, and wait for my answer. Then reuse existing code, write one it() per in-scope testcase in the story's spec file, type-check and lint it without running any tests, write the handoff file, install the run scripts into the project, and print the exact command I should run."

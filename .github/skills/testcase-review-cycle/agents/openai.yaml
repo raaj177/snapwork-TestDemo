@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Case Review Cycle"
+  short_description: "Review, revise and re-review one generated test case workbook until its Quality score is above 90, then copy the QA-approved version to Testcases/"
+  default_prompt: "Use $testcase-review-cycle for one workbook in testcase/Generated Testcases/ and its matching user story in .github/_requirements/user_stories/: ask the workbook and scope once, then without stopping run $test-cases-reviewer (Review_v1_0 to Review Reports/) and, while the review Quality score is not above 90/100, $test-cases-generator Mode C from that review (next v1_<n> to Revised Testcases/) and $test-cases-reviewer again, at most 3 revisions. Then wait for QA approval and only for a version that passed the gate copy it to testcase/Testcases/."

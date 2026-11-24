@@ -1,0 +1,269 @@
+name: test-cases-generator
+version: 1.10.0
+status: active
+category: Quality Assurance
+platforms:
+  - mobile
+  - android
+  - ios
+  - web
+  - pwa
+  - mobile_web
+  - mobile_pwa
+  - web_pwa
+  - mobile_web_pwa
+tags:
+  - qa
+  - testing
+  - test-design
+  - test-cases
+  - test-generation
+  - traceability
+  - validation
+  - gap-recovery
+  - review-controls
+owner: Akshay Awtade
+
+changelog:
+  - version: "1.10.0"
+    changes:
+      - "Enforced platform-specific behavior in test steps based on the 'Select the required platform' choice:"
+      - "When Android is selected: only Android-specific behavior is generated in test steps (e.g. 'Trigger Back navigation: Tap the in-app back arrow or press the device hardware back button'), completely excluding iOS-specific actions and gestures."
+      - "When iOS is selected: only iOS-specific behavior is generated in test steps (e.g. 'Trigger Back navigation: Tap the back arrow or perform a swipe-from-left-edge gesture'), completely excluding Android-specific actions."
+      - "When Both Android and iOS is selected: preserves dual behavior combining both platform actions (e.g. 'Android: [behavior]. iOS: [behavior]')."
+      - "Updated extract_matrix.py, SKILL.md, rules.md, and platform-engine.md."
+  - version: "1.9.0"
+    changes:
+      - "Removed platform autodetection logic and replaced it with a direct platform detection prompt presenting all 7 configured options: Mobile App, Web, Mobile Web, Mobile App + Web, Mobile App + Mobile Web, Web + Mobile Web, Mobile App + Web + Mobile Web."
+      - "Added mandatory sub-selection prompt when 'Mobile App' is selected: 'Select the required platform' with options 1. Both Android and iOS (Recommended), 2. Android, 3. iOS, blocking execution until the user responds."
+      - "Configured behavior for Both Android and iOS: proceeds with existing mobile app logic (IOS Testcase column present with selective Yes/No, and iOS Dashboard created)."
+      - "Configured behavior for Android: removes the IOS Testcase column from every user story tab in the generated Excel workbook and prevents creation of the iOS Dashboard tab."
+      - "Configured behavior for iOS: retains the IOS Testcase column with every entry required to be 'Yes' for 100% of test cases, and creates the iOS Dashboard tab."
+      - "Configured behavior for Web, Mobile Web, and Web + Mobile Web: ensures the IOS Testcase column is not present in user story tabs and the iOS Dashboard tab is not created."
+      - "Updated common.py, workbook_builder.py, validate_cases.py, verify_workbook.py, build.py, extract_source.py, extract_matrix.py, SKILL.md, rules.md, workbook-contract.md, and platform-engine.md."
+  - version: "1.8.0"
+    changes:
+      - "Updated platform detection confirmation to display suggestions for the remaining 6 platform combinations along with the confirmation question, presenting the autodetected platform as (Recommended) as option 1."
+      - "Supported user selection between the recommended autodetected platform and the other six platform combinations: Mobile App, Web, Mobile Web, Mobile App + Web, Mobile App + Mobile Web, Web + Mobile Web, Mobile App + Web + Mobile Web."
+      - "Enforced complete replacement of short codes (e.g. screen codes S1, S2; error codes E01, E02; component codes) with their proper descriptions from the user story (e.g. 'Login Basic screen' instead of 'S1')."
+      - "Enforced resolution of generic step references (e.g. 'step 1', 'step 2') to their concrete actions/descriptions (e.g. 'Click on continue button' instead of 'step 1')."
+      - "Enforced resolution of generic page/screen terms (e.g. 'Page 1', 'Page 2') to their referenced document titles where available."
+      - "Mandated simple, clear language understandable by any person across all narrative/prose columns (Test Steps, Pre-condition, Expected Result, Test Description, Test Scenarios, Remarks)."
+      - "Updated SKILL.md, rules.md, reviewer-rules.md, platform-engine.md, gap-recovery.md, workbook-contract.md, extract_source.py, and validate_cases.py."
+  - version: "1.7.0"
+    changes:
+      - "Added multi-document user story input support: when multiple input user story docs are provided in the user story user input section, the number of output Excel workbooks generated is exactly the same as per the input docs."
+      - "Every input document generates a separate test case Excel workbook (1:1 Document-to-Workbook mapping)."
+      - "Each input document executes independently through the full test case generation, matrix extraction, workbook build, and gap recovery pipeline."
+      - "Maintained single final Excel workbook delivery per input document: within each document's generation flow, only the single final Excel workbook is delivered without intermediate uncorrected copies or separate regression files."
+  - version: "1.6.4"
+    changes:
+      - "Updated dashboard platform column generation to dynamically detect exact distinct platform strings from the test cases' Platform column (e.g. 'Mobile App', 'Web', 'Mobile App+Web')."
+      - "Multi-platform test cases form their own dedicated combination columns, eliminating double counting."
+      - "Live formula calculations report exact counts such that each test case belongs to exactly one platform column, guaranteeing the sum of counts across the platform columns in every summary row equals exactly the Total Test Cases count."
+  - version: "1.6.3"
+    changes:
+      - "Replaced the terminology PWA by 'Mobile Web' wherever referenced across the skill (definitions, platform classifications, Platform column values, and dynamic platform count columns in Dashboard and Automation Dashboard)."
+  - version: "1.6.2"
+    changes:
+      - "Enforced single final Excel workbook delivery: the skill outputs strictly ONE final Excel workbook. Removed dual-workbook output; gap recovery updates and consolidates directly into the single final workbook."
+  - version: "1.6.1"
+    changes:
+      - "Prevented Mobile App, Web, and PWA columns from being generated in the iOS Dashboard tab (platform columns are generated exclusively on Dashboard and Automation Dashboard tabs)."
+  - version: "1.6.0"
+    changes:
+      - "Added Independent QA Review & Gap Recovery mechanism to compare original User Story/BRD against generated workbook."
+      - "Implemented evidence-based gap recoverability evaluation: recover gaps only when sufficient evidence exists in original source documents (User Story, ACs, business rules, ADR) without guessing."
+      - "Recovered test cases: generated without unsupported assumptions, added to appropriate testcase sheet, fully populated with all mandatory fields, Requirement Reference, Source Type, Priority, Test Category, and Platform, without duplicating existing coverage."
+      - "Unrecoverable gaps: preserved unchanged, no invented behavior/rules/data, exact reason and clarification (RQ-...) documented in Remarks, classified as BLOCKED."
+      - "Mandatory Remarks formatting: [Gap Recovery - RECOVERED], [Gap Recovery - UNRECOVERABLE], [Gap Recovery - ADR CONTRADICTION], [Gap Recovery - DEFECT CORRECTED]."
+      - "Implemented and enforced Review Controls G01–G14 (Traceability, Semantic Alignment, 8 Dimensions, Verifiable Expected Results, Schema, Test Data Realism, Platform Integrity, Automation Governance, Duplicate Prevention, Lifecycle Preservation, Coverage Resolution, ADR Governance, Formula Integrity, Dual Workbook Preservation)."
+      - "Preserved original generated workbook intact; delivered separate corrected workbook copy containing recoverable test cases."
+      - "Added Review Report generation (Gap ID, Requirement ID, Test Case ID, Gap Description, Recovery Status, Recovery Action, Remarks) with separate summaries for recovered vs unrecoverable gaps."
+      - "Added gap_recovery.py engine supporting automated gap recovery, dual-workbook generation, review report generation, and G01–G14 validation."
+      - "Bifurcated SKILL.md into modular reference files (references/platform-engine.md, references/gap-recovery.md) reducing SKILL.md to 280 lines (under 500 lines target)."
+  - version: "1.5.0"
+    changes:
+      - "Added 'BA Comments' column immediately before 'Developer Status' column in all user story related testcase tabs (e.g. US-001, US-002)."
+      - "Added 'Platform' column immediately before 'Actual Result' (immediately after 'Test Category') in all user story related testcase tabs."
+      - "Added Option 'Delete User story - Delete absolute or not required user story from test bank (Mode E)' in Step 1 of SKILL.md with sequential flow: Step 2 asks for Test Bank, Step 3 asks for User Story to delete (mandatory pause, supports comma-separated entries like 'US001-login, US002-signup'). Preserves remaining sheets intact and dynamically recalculates totals for Dashboard, Automation Dashboard, and iOS Dashboard."
+      - "Updated auto-detection platform logic to support 7 platform classifications (Mobile App, Web, PWA, Mobile + Web, Mobile + PWA, Web + PWA, Mobile + Web + PWA) using keyword detection and 5-pillar definition-based platform detection algorithm."
+      - "Populated Platform column in user story sheets with actual executable platform(s) (e.g. 'Mobile App', 'Web', 'Mobile app, PWA'), never showing unapplicable platforms."
+      - "Dynamically generated additional platform columns 'Web', 'Mobile App', 'PWA' in Dashboard and Automation Dashboard based strictly on available platforms, calculating live test case counts via formulas."
+      - "Replaced random/placeholder test data and test data ID references (e.g. TD1, TD2) with concrete sample values extracted from the user story (e.g. 'PAN ID: AYNMH8765J'), keeping the column empty if no test data is required."
+      - "Enforced strict runtime file integrity mandate: generated files should not be edited during runtime of skill."
+      - "Rephrased definitions for Mobile App, Web, and PWA in Test Case-Level Platform Values per Automation Types specification (What is tested / Runs on): Mobile (Native apps installed from .apk/.ipa on real Android/iOS devices, emulators/simulators), Web (website in desktop browser on Chromium, Firefox, WebKit), PWA (web app as a phone user opens it in mobile browser or installed to home screen on Chrome on Android, Safari on iOS)."
+  - version: "1.4.9"
+    changes:
+      - "Renamed platform columns in Dashboard and Automation Dashboard to proper casing: 'Web', 'PWA', 'Mobile App'."
+      - "Dynamic platform column generation: Dashboard and Automation Dashboard only include platform columns if and only if the respective platform exists (detected or inputted by user or present in test cases)."
+      - "If 'mobile app' and 'web' exist, only 'Mobile App' and 'Web' columns are rendered; 'PWA' is omitted."
+      - "Updated common.py, dashboard_renderer.py, story_dashboard.py, workbook_builder.py, rules.md (Rule R81), workbook-contract.md (Rule 28), SKILL.md, and test_regression_suite.py."
+  - version: "1.4.8"
+    changes:
+      - "Removed RTM and Coverage Heatmap tabs from the generated Excel workbook; RTM and coverage depth remain verified internally during preflight audit."
+      - "Preserved governed Excel workbook sheet structure: Dashboard, Automation Dashboard, iOS Dashboard, Config, Test Data Requirements (9 cols), and Module sheets."
+      - "Updated workbook_builder.py, SKILL.md, rules.md, reviewer-rules.md, workbook-contract.md, and test_regression_suite.py."
+  - version: "1.4.7"
+    changes:
+      - "Updated platform detection logic to support 7 combinations (mobile, web, pwa, mobile_web, mobile_pwa, web_pwa, mobile_web_pwa) with dedicated indicator keywords, fallback prompt, and exact user confirmation prompt ('The autodetected platform is <autodetected platform> should I continue?')."
+      - "Added 'Platform' column in every user story tab positioned immediately after Test Category, tracking exact supported platform(s) without hallucination."
+      - "Added 'BA Comments' column in every user story tab positioned immediately before Developer Status (following Remarks)."
+      - "Added dedicated columns for 'mobile app', 'web', 'pwa' in Dashboard and Automation Dashboard to report live platform-specific test case counts (counting combinations separately against every platform)."
+      - "Added Rules R78 to R81 across rules.md, workbook-contract.md, SKILL.md, and scripts (common.py, workbook_builder.py, dashboard_renderer.py, story_dashboard.py, validate_cases.py, check_coverage.py, extract_matrix.py, extract_source.py)."
+  - version: "1.4.6"
+    changes:
+      - "Integrated 8 Coverage Dimensions & Multi-Dimensional Depth (Gate 4a / Rule R73): Positive, Negative, Boundary, State/Transition, Role/Permission, Error Handling, Platform Variant, Integration/Data."
+      - "Enforced Partial Coverage Rule: Any requirement missing an applicable expected coverage dimension is classified as 'Partially Covered', never 'Covered'."
+      - "Delivered dedicated Requirement Traceability Matrix (RTM) worksheet (Gate 8 / Rule R74) with 23 standardized audit columns ensuring bidirectional requirement-to-test-case traceability."
+      - "Delivered dedicated Coverage Heatmap worksheet (Gate 8a / Rule R75) containing User Story x Dimension Depth and Requirement Risk x Coverage Distribution matrices."
+      - "Implemented Risk-Weighted Coverage Model & Metrics (Section 7.3 / Rule R76) weighting requirements by risk (High=3, Medium=2, Low=1), reporting Dimension Coverage % and Risk-Weighted Coverage %, and surfacing High-Risk Gaps."
+      - "Enhanced Test Data Requirements worksheet (Gate 7 / Rule R77) with 9-column story-wise traceability schema (Test Data ID, User Story ID, Module, Description, Required For, Requirement Ref, Setup Notes, Environment, Status)."
+      - "Added Rules R73 to R77 and updated SKILL.md, rules.md, reviewer-rules.md, workbook-contract.md, check_coverage.py, workbook_builder.py, and build.py."
+  - version: "1.4.5"
+    changes:
+      - "Adopted Requirement-to-Test Case Comparison & Traceability Standard (QA Governance & Test Design Standard / Reviewer Rule 1)."
+      - "Enforced Governing Principle: Requirement ID matching alone does not establish requirement coverage; semantic requirement comparison across business intent, functional behaviour, acceptance criteria, execution conditions, and verifiable expected results is mandatory."
+      - "Added Requirement Analysis Rules 1-3: 9-point Requirement Decomposition, Requirement Identification (original IDs, no invented IDs, multi-mapping control), and Business Intent Interpretation."
+      - "Added Requirement-to-Test Case Comparison Rules 4-10: Functional Coverage breadth (9 dimensions), Semantic Comparison (8 attributes), Existing Test Case Classification, Missing Requirement Coverage, Partial Requirement Coverage (never mark requirement fully covered until all ACs covered), Duplicate Test Case Detection (semantic equivalence across 5 attributes), and Ambiguous Requirements (BLOCKED with TBD & RQ- reference)."
+      - "Enforced Existing Test Case Classification safeguards (Rule 6): do not modify test cases unnecessarily, preserve unchanged cases, do not classify as Modified only because wording changed, record specific modification reason in Remarks for every Modified case (GV228), record invalidation reason in Remarks, and never delete historical test cases."
+      - "Added intermediate Requirement Coverage Matrix (| Requirement ID | Acceptance Criteria | Existing Test Case | Comparison Result | Gap / Action |) before final workbook generation."
+      - "Integrated Mandatory 15-Step Comparison Workflow, 11-point Requirement Coverage Validation, and 15-point Final Acceptance Checklist."
+      - "Enforced 13 core testcase attributes, dedicated Source Type column, and strict prohibition of vague expected results ('System should work correctly', 'User should get proper response', 'Application should behave as expected') across validate_cases.py and check_coverage.py."
+      - "Added Rules R61 through R72 in rules.md and updated SKILL.md, workbook-contract.md, prompts-library.md, validate_cases.py, and check_coverage.py."
+  - version: "1.4.4"
+    changes:
+      - "Added Mode E: 'Delete user story tab (Mode E): Delete the user story test cases that are no longer part of application(eg: US002-Profile Management)'."
+      - "Supports deleting specified user story module/tab from existing test bank copy via --delete-story CLI argument or delete_story in cases.json."
+      - "Automatically prunes Test Data Requirements tied exclusively to the deleted story and cleans up shared prerequisites."
+      - "Preserves all remaining user story sheets and their test cases intact."
+      - "Dynamically recalculates all totals, status distributions, automation counts, and iOS counts across all remaining sheets for Dashboard, Automation Dashboard, and iOS Dashboard."
+      - "Added rule R60 in rules.md and updated workbook-contract.md, SKILL.md, and scripts (build.py, common.py, validate_cases.py, verify_workbook.py)."
+
+  - version: "1.4.3"
+    changes:
+      - "Enforced concrete, realistic sample data in Test Data column matching specific business rules/combinations (e.g. password combinations with uppercase, special char, number, length -> 'Adhi@23435g') instead of random/generic placeholder text."
+      - "Where no test data is possible or needed (e.g. navigation, viewing static screens, back button, screen orientation), Test Data column is kept completely empty."
+      - "Added rule R59 in rules.md, updated workbook-contract.md, prompts-library.md, and SKILL.md."
+      - "Updated extract_matrix.py to generate rule-driven sample test data or empty string."
+      - "Added GW214 warning in validate_cases.py to catch generic test data placeholders."
+      - "Normalized test_data in common.py to sanitize 'N/A' or 'None' placeholders to empty string."
+
+  - version: "1.4.2"
+    changes:
+      - "Added deterministic test case skeleton extractor script (scripts/extract_matrix.py) to guarantee identical test case counts for any input document."
+      - "Added Rules R55 to R58 in rules.md: Table Row Multi-Error Rule (1 negative case per quoted error message), Boundary Multiplier Rule, Trigger Bundling Rule, and Unstated Edge Cases Exclusion."
+      - "Updated validate_cases.py and build.py to support --skeleton validation enforcing exact deterministic test case count and IDs."
+
+  - version: "1.4.1"
+    changes:
+      - "updated the automation candidate (yes/no) logic as per the automation audit skill."
+      - "updated the excel to have Actual automation result column"
+      - "updated the excel in case of brownfield from scratch and existing user story , greenfield with existing user story modes to have the test bank copied in the new generated excel and update the user story in the sheet as per the input"
+      - "added columns developer comments and developer status"
+
+  - version: "1.4.0"
+    changes:
+      - "updated the excel to have proper count of test cases previous testcase count/ current testcase count/ automation testcase count /ios testcase count in dashboard"
+      - "Added 2 more input modes GREENFIELD With Updated User Story and Brownfield — Existing App, From Scratch."
+
+  - version: "1.3.9"
+    changes:
+      - "updated the ios dashboard sheet creation in case of only mobile app as the platform"
+      - "Added Testcase behaviour separation based on ios and android platform if it behaves differently on both cases like back button in android and gesture in ios to move back to previous screen"
+      - "Added Testcase types column for 3 modes other than greenfield with new/invalidated/modified/existing"
+
+  - version: "1.3.8"
+    changes:
+      - "Updated the skill as per the playbook format"
+      - "added input to detect the platform automatically mobile app or web/pwa"
+      - "updated the inputs to have 2 modes brownfield and greenfield"
+      - "Added inputs to brownfield to have ADR, constitution, Document scope, context history"
+
+  - version: "1.3.7"
+    date: "2026-09-12"
+    changes:
+      - "Added mandatory iOS Dashboard sheet to every generated workbook."
+      - "iOS Dashboard mirrors the manual Dashboard: Overall, User Story/Module-wise, Test Category-wise, Priority-wise, execution status buckets, and Pass %."
+      - "Every iOS Dashboard formula dynamically counts only testcase rows where IOS Testcase = Yes; execution buckets use the normal manual Status column."
+      - "Added structural verification that iOS Dashboard exists and contains IOS Testcase = Yes COUNTIF/COUNTIFS filtering."
+      - "Added dashboard reconciliation for iOS Dashboard in build.py."
+      - "Documented identical behavior for Claude Projects, ChatGPT, Codex, Cursor, Cloud Agents, and similar runtimes."
+
+  - version: "1.3.6"
+    date: "2026-09-12"
+    changes:
+      - "Added mandatory requirement-to-testcase normalization for technical/system-style BRD and User Story statements."
+      - "Test descriptions should use clear user-observable/business language while preserving every behavior-driving condition."
+      - "Internal flags/states may be moved to Pre-condition or Test Data when that makes the testcase clearer, with original Requirement Reference retained."
+      - "Added explicit example for valid credentials + cleared first-login condition routing to Dashboard."
+      - "Clarified that normalization must not weaken, reinterpret, or invent requirements."
+      - "Rule is runtime-neutral and explicitly supports Claude Projects as well as ChatGPT, Codex, Cursor, Cloud Agents, and similar tools."
+
+  - version: "1.3.5"
+    date: "2026-09-11"
+    changes:
+      - "Added Greenfield/Brownfield project-aware generation. Greenfield generates complete approved-scope coverage; Brownfield reviews existing project artifacts first and generates delta-only coverage."
+      - "Added Claude Projects compatibility: Project Context/project knowledge is reviewed for matching Story IDs, modules/features, and semantically equivalent requirements before new testcase generation. Equivalent behavior applies to accessible Codex, ChatGPT, Cursor, Cloud Agent, or similar project context."
+      - "Brownfield semantic delta now prevents repeated testcase rows for UNCHANGED / NO_MEANINGFUL_CHANGE requirements; testcase generation is limited to ADDED, MODIFIED, and IMPACTED behavior, with removed requirements treated as RETIRE_CANDIDATE."
+      - "Added mandatory IOS Testcase Yes/No column. Yes marks a focused important-scenario subset for iOS execution; it does not duplicate the entire suite and is independent of automation/regression classification."
+      - "Added iOS-specific coverage guidance for biometrics, permissions, keyboard/input, app lifecycle, WebView/Safari/SDK transitions, deep links, notifications, native file/photo/camera pickers, navigation/dismissal, secure storage/session, and supported iOS/device compatibility when applicable."
+      - "Added validator enforcement for explicit IOS Testcase classification and a warning against blanket all-Yes iOS selection."
+
+  - version: "1.3.4"
+    date: "2026-09-10"
+    changes:
+      - "Added one consolidated Test Data Requirements worksheet to every generated testcase workbook."
+      - "Added compact columns: Test Data ID, Test Data Description, Required For, Status."
+      - "Added controlled Test Data Status values: Not Prepared, Requested, In Progress, Available, Blocked."
+      - "Added top-level test_data_requirements to cases.json; requirements must be semantically unique across the workbook and must not contain actual credentials, PII, account numbers, passwords, or secrets."
+      - "Added governance validation for missing/duplicate test-data IDs, duplicate descriptions, and invalid Test Data Status values."
+      - "Updated workbook structural verification to require the new sheet."
+
+  - version: "1.3.3"
+    date: "2026-09-10"
+    changes:
+      - "Removed Generic Cross-Cutting testcase generation from the Test Excel output."
+      - "Removed the mandatory shared 8-case cross-cutting set and the dedicated worksheet requirement."
+      - "Added preflight rejection (GV005) if a Generic Cross-Cutting module/sheet is supplied."
+      - "Source-explicit cross-cutting behavior remains allowed only inside the relevant story/module with normal traceability."
+      - "Accessibility testcase exclusion remains unchanged."
+      - "All other workbook structure, dashboards, fields, scoring, traceability, automation, regression, and governance behavior remains unchanged."
+
+  - version: "1.3.2"
+    title: "Accessibility testcase exclusion"
+    changes:
+      - "Removed Accessibility from the governed Excel Test Category enum and dropdown values."
+      - "Removed accessibility/a11y/WCAG/assistive-navigation scenarios from generated testcase scope."
+      - "Replaced the accessibility-oriented Generic Cross-Cutting case with generic unexpected-error recovery so the shared set remains eight cases."
+      - "Added an explicit generation rule: accessibility-only requirements are excluded from testcase coverage denominators and no accessibility cases are written to the workbook."
+      - "All other workbook structure, governance, scoring, traceability, validation, automation fields, and output behavior remain unchanged."
+
+  - version: "1.3.1"
+    title: "Traceability & Governance Hardening"
+    changes:
+      - "Added scripts/validate_cases.py hard preflight before workbook creation."
+      - "Scenario IDs and Test Case IDs are mandatory and unique."
+      - "SOURCE/DERIVED/BLOCKED cases require Requirement Reference."
+      - "BLOCKED cases require TBD expected result plus RQ-... in Remarks."
+      - "Config enum validation now rejects values such as Not Started; design-stage default is Not Executed."
+      - "Generic Cross-Cutting defaults to ADVISORY unless explicit source evidence exists."
+      - "Regression Candidate must be explicitly Yes/No; blanket all-Yes classification is detected."
+      - "build.py aborts before creating Excel when preflight governance fails."
+      - "Removed silent defaults of SOURCE and Regression=Yes from the workbook renderer."
+
+  - version: "1.3.0"
+    title: "Token-optimised restructure (same output)"
+    description: "Output contract unchanged: one governed workbook (Dashboard, Automation Dashboard, Config, one sheet per story, Generic Cross-Cutting), 21 columns, Config-backed dropdowns, live COUNTIF/COUNTIFS dashboards, Automation Remark final. scripts/common.py is byte-identical to v1.2.3."
+    changes:
+      - "SKILL.md rewritten (6.2K → ~2.6K tokens); conditional loading table tells the model which reference to open, and only that one."
+      - "references/rules.md merges constitution-rules, copilot-enforcement, coverage-checklist, scoring-rubric (11.5K → 3.4K) with duplicates removed (status lists, COPILOT, hard-fails were each stated 3–4 times)."
+      - "references/prompts-library.md condensed to non-Generate modes; COPILOT contracts as one table."
+      - "references/story-history.md (registry + QA-DELTA-001) loaded only when a Story ID hits the registry."
+      - "references/workbook-contract.md loaded only on demand — build.py enforces it anyway."
+      - "scripts/build.py: one command = build + structural verify + LibreOffice recalc error scan + dashboard reconciliation + coverage/duplicate/vague check. Replaces 3–4 separate tool calls; the model never opens common.py."
+      - "scripts/extract_source.py: tracked-change-aware DOCX/PDF/text extraction printed once (replaces prose instructions to inspect document.xml)."
+      - "scripts/check_coverage.py: reads cases.json directly (no CSV round-trip); same heuristics."
+      - "assets/cases.example.json replaces example_data.py and the 43-column test_case_template.csv, which conflicted with the 21-column workbook and caused a second Excel/CSV artifact."
+      - "Cases are written once (cases.json) — no chat echo of Gate 2/4, no per-story files, no side CSV."
+      - "Removed RELEASE_NOTES.md from the package (it was being pulled into context)."

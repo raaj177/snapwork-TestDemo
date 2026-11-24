@@ -1,0 +1,37 @@
+# Workspace root: .github/ (skills + requirements), Automation/ (framework, has its own .gitignore), orchestration/.
+# Never committed: app builds, run output (reports, results, screenshots, logs), local secrets, caches.
+
+# ---- Secrets and local configuration (anywhere) ----
+.env
+.env.*
+!.env.example
+**/test-data.local.json
+
+# ---- App builds (anywhere) ----
+*.apk
+*.aab
+*.ipa
+*.app/
+*.app.zip
+
+# ---- Reports shared by hand: keep only the folder's README ----
+/reports/*
+!/reports/README.md
+
+# ---- Orchestration local caches (state and progress files are committed) ----
+orchestration/.review-cache/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# ---- Office lock files ----
+~$*
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/

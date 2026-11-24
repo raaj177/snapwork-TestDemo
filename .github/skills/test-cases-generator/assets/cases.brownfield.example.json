@@ -1,0 +1,124 @@
+{
+  "project_mode": "BROWNFIELD",
+  "source_workbook": "<path to the original test-case workbook>",
+  "us_id_meta": "US-001..US-003 (from User Story <DocumentName>)",
+  "dashboard_title": "<Product/Module> - Test Execution Dashboard",
+  "platform": "mobile",
+  "figma_link": null,
+  "acs": [
+    "AC-01",
+    "AC-02"
+  ],
+  "test_data_requirements": [
+    {
+      "id": "TD-001",
+      "description": "Customer ID with password expired",
+      "required_for": "US-001",
+      "status": "Not Prepared"
+    },
+    {
+      "id": "TD-002",
+      "description": "Customer ID with account inactive",
+      "required_for": "US-001",
+      "status": "Not Prepared"
+    }
+  ],
+  "modules": [
+    {
+      "sheet": "US-001 Login",
+      "label": "US-001. Login",
+      "baseline_cases": [
+        {
+          "scenario_id": "TS_US001_001",
+          "scenario": "Verify valid login",
+          "case_id": "TC_US001_001",
+          "description": "Verify an eligible user can authenticate with valid credentials.",
+          "requirement_reference": "US-001 | AC-01",
+          "priority": "P0",
+          "precondition": "Eligible synthetic test user exists.",
+          "type": "Positive",
+          "steps": "1. Open Login.\n2. Enter valid credentials.\n3. Select Login.",
+          "test_data": "User ID: user@example.com, Password: Adhi@23435g",
+          "expected_result": "The authenticated destination specified by AC-01 is displayed; one session exists; no validation error is shown.",
+          "category": "Functional",
+          "platform": "mobile app",
+          "actual_result": "",
+          "status": "Not Executed",
+          "automation_candidate": "Yes",
+          "regression_candidate": "Yes",
+          "ios_testcase": "Yes",
+          "source_type": "SOURCE",
+          "remarks": "US-001 AC-01",
+          "ba_comments": "",
+          "developer_status": "",
+          "developer_comment": "",
+          "automation_status": "Not Executed",
+          "actual_automation_result": "",
+          "automation_remark": "",
+          "ios_testcase": "Yes"
+        }
+      ],
+      "cases": [
+        {
+          "scenario_id": "TS_US001_001",
+          "scenario": "Verify valid login",
+          "case_id": "TC_US001_001",
+          "description": "Verify an eligible user can authenticate with valid credentials.",
+          "requirement_reference": "US-001 | AC-01",
+          "priority": "P0",
+          "precondition": "Eligible synthetic test user exists.",
+          "type": "Positive",
+          "steps": "1. Open Login.\n2. Enter valid credentials.\n3. Select Login.",
+          "test_data": "User ID: user@example.com, Password: Adhi@23435g",
+          "expected_result": "The authenticated destination specified by AC-01 is displayed; one session exists; no validation error is shown.",
+          "category": "Functional",
+          "platform": "mobile app",
+          "actual_result": "",
+          "status": "Not Executed",
+          "automation_candidate": "Yes",
+          "regression_candidate": "Yes",
+          "ios_testcase": "Yes",
+          "source_type": "SOURCE",
+          "remarks": "US-001 AC-01",
+          "ba_comments": "",
+          "developer_status": "",
+          "developer_comment": "",
+          "automation_status": "Not Executed",
+          "actual_automation_result": "",
+          "automation_remark": "",
+          "ios_testcase": "Yes",
+          "test_case_type": "existing"
+        },
+        {
+          "scenario_id": "TS_US001_002",
+          "scenario": "Verify login rejection on invalid password",
+          "case_id": "TC_US001_002",
+          "description": "Verify login is rejected when the password is incorrect.",
+          "requirement_reference": "US-001 | AC-02",
+          "priority": "P0",
+          "precondition": "Eligible synthetic test user exists.",
+          "type": "Negative",
+          "steps": "1. Open Login.\n2. Enter registered user ID and an incorrect password.\n3. Select Login.",
+          "test_data": "User ID: user@example.com, Password: WrongPassword123!",
+          "expected_result": "User remains on Login; no session is created. Exact error message: TBD.",
+          "category": "Functional",
+          "status": "Not Executed",
+          "automation_candidate": "No",
+          "regression_candidate": "Yes",
+          "source_type": "BLOCKED",
+          "remarks": "US-001 AC-02 | RQ-01: What exact message is shown for an incorrect password? | **No automation reason:** The case verifies the exact allowed Customer ID / ACC / CIN / Trade Code characters and formatting. RQ-01 leaves those rules unresolved, so the test cannot define reliable input boundaries or expected validation behavior without inventing requirements.",
+          "developer_status": "",
+          "developer_comment": "",
+          "automation_status": "Not Executed",
+          "actual_automation_result": "",
+          "automation_remark": "",
+          "ios_testcase": "No",
+          "test_case_type": "new"
+        }
+      ]
+    }
+  ],
+  "project_type": "Brownfield",
+  "project_context_status": "Reviewed | Unavailable | Not Applicable",
+  "delta_scope": "Story update: designated test bank is copied as-is in the generated workbook; updated user story sheet holds Existing + Modified + Invalidated + New"
+}

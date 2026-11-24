@@ -1,0 +1,954 @@
+{
+  "generator": "smoke:generate",
+  "workbook": "GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx",
+  "workbookName": "GFG_EPIC001_Login_Authentication_v5 3",
+  "workbookSha256": "69326d7c4571607d72dea0a3dd66d311ceba3177ab03b306bf592b835d2d16b5",
+  "platform": "android",
+  "selection": {
+    "automationCandidate": "Yes",
+    "priority": "P0",
+    "excludeTypes": [
+      "deleted",
+      "invalidated"
+    ]
+  },
+  "stories": [
+    {
+      "story": "US002",
+      "smokeSpec": "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US002.test.ts",
+      "smokeSha256": "b7187ae74e059822d2ff005e9213275f48b76bec20f036116eda50b2769288bd",
+      "eligible": [
+        {
+          "id": "TC_US002_017",
+          "title": "Submit valid credentials using the Login button on the Customer ID login screen.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. The workbook expects the two-factor screen after valid credentials."
+        },
+        {
+          "id": "TC_US002_019",
+          "title": "Perform the documented action for Failed Attempt Counter on the Customer ID login screen.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US002_025",
+          "title": "Exercise the source requirement without adding behavior: Mobile No. Tab: Tab selector — switches view to Mobile Number + Password login (US-003). Type: Toggle / Tab. Mandatory: Yes. Validation: Yes",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US002_026",
+          "title": "Exercise the source requirement without adding behavior: The login screen displays: FundsGenie magic lamp logo, \"Welcome back!\" text, a Customer ID tab and a Mobile No. tab, Customer ID/Trade Code field, Password field (masked), show/hide toggle, \"Forgot ID or Password?\" link, Login button, and \"Don't have an account? Sign up now\" link.",
+          "status": "missing",
+          "reason": "Blocked: The FundsGenie magic-lamp logo has no accessibility node in the login dump (evidence/android/Login/customer-id-tab-default.xml: no node for the logo), so the full expected list cannot be proven; adding a Semantics label to the logo would unblock it."
+        },
+        {
+          "id": "TC_US002_027",
+          "title": "Exercise the source requirement without adding behavior: The Customer ID tab is selected by default; tapping Mobile No. tab switches to the mobile number login screen (US-003).",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US002_028",
+          "title": "Exercise the source requirement without adding behavior: Tapping Login with valid credentials navigates the user to the 2FA screen (US-004).",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified."
+        },
+        {
+          "id": "TC_US002_029",
+          "title": "Exercise the source requirement without adding behavior: The Login button is inactive (greyed out) until both fields contain values.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US002_031",
+          "title": "Exercise the source requirement without adding behavior: Entering an invalid User ID or incorrect password shows: \"Invalid Username or Password. X of 5 attempts remaining.\"",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US002_033",
+          "title": "Exercise the source requirement without adding behavior: After 3 consecutive failed password attempts, the login screen transitions to the failure recovery screen (US-004).",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US002_034",
+          "title": "Exercise the source requirement without adding behavior: After 5 consecutive failed attempts, the account is locked and the user must use the Unlock A/C flow (US-005).",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US002_038",
+          "title": "Exercise the source requirement without adding behavior: Failed attempt counter resets to zero on any successful login.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US002_040",
+          "title": "Exercise the source requirement without adding behavior: The Login button remains inactive (greyed out) until both the Customer ID and Password fields contain at least one character.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US002_041",
+          "title": "Exercise the source requirement without adding behavior: After 5 failed attempts, the account locks at the back end and persists across all devices until the unlock flow is completed via web (US-005).",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US002_043",
+          "title": "Exercise the source requirement without adding behavior: If the user has changed their password on any other Geojit platform (e.g., Flip), the FundsGenie session is invalidated, and a fresh login is required.",
+          "status": "missing",
+          "reason": "Blocked: Needs a password change on another Geojit platform (e.g. Flip) during an open FundsGenie session; this cross-platform event cannot be produced from the device."
+        }
+      ]
+    },
+    {
+      "story": "US003",
+      "smokeSpec": "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US003.test.ts",
+      "smokeSha256": "39f09a3e832a905771eea4420f0b0b678afe60803f73876cdbad78439456f8c4",
+      "eligible": [
+        {
+          "id": "TC_US003_016",
+          "title": "Submit valid credentials using the Login button on the mobile-number login screen.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Also no test account with a registered mobile number was provided."
+        },
+        {
+          "id": "TC_US003_020",
+          "title": "Exercise the source requirement without adding behavior: Country Code Selector: Displays Indian flag and +91 prefix for the mobile number field. Class C — Indian format assumed.. Type: Dropdown / Selection. Mandatory: Yes. Validation: Yes",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US003_021",
+          "title": "Exercise the source requirement without adding behavior: Tapping the \"Mobile No.\" tab on the login screen switches to the mobile number login view.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US003_022",
+          "title": "Exercise the source requirement without adding behavior: The mobile number login view displays: country code selector (+91), Mobile Number field, Password field (masked), show/hide toggle, \"Forgot ID or Password?\" link, Login button, and \"Don't have an account? Sign up now\" link.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US003_023",
+          "title": "Exercise the source requirement without adding behavior: Tapping Login with a valid mobile number and correct password navigates the user to the 2FA screen (US-004).",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Also no test account with a registered mobile number was provided."
+        },
+        {
+          "id": "TC_US003_024",
+          "title": "Exercise the source requirement without adding behavior: The Login button is inactive (greyed out) until both the mobile number and password fields contain values.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US003_025",
+          "title": "Exercise the source requirement without adding behavior: Entering an invalid mobile number or incorrect password shows the same failure handling as US-002.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US003_028",
+          "title": "Exercise the source requirement without adding behavior: The Login button remains inactive until both the mobile number and password fields contain values.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US003_029",
+          "title": "Exercise the source requirement without adding behavior: Failed attempt counter rules are identical to US-002 — 3 failures trigger OTP recovery (US-009); 5 failures lock the account (US-007).",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US003_032",
+          "title": "Confirm the login response does not confirm or deny whether a synthetic mobile number is registered.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped. The unregistered-number response was not dumped."
+        }
+      ]
+    },
+    {
+      "story": "US004",
+      "smokeSpec": "",
+      "smokeSha256": "",
+      "eligible": [
+        {
+          "id": "TC_US004_003",
+          "title": "Perform the documented action for OTP Field (Failure Recovery) on the login failure recovery screen.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_015",
+          "title": "Perform the documented action for Login Button (Failure Recovery) on the login failure recovery screen.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_017",
+          "title": "Perform the documented action for Failed Attempt Counter (BE) on the login failure recovery screen.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_023",
+          "title": "Exercise the source requirement without adding behavior: After 3 consecutive failed login attempts, the login screen shows: Customer ID/Trade Code field, OTP field with a Resend link, Password field, \"Forgot Code or Password?\" link, Login button, and \"Don't have an account? Sign up now\" footer.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_024",
+          "title": "Exercise the source requirement without adding behavior: OTP is triggered automatically after 3 failure attempts.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_026",
+          "title": "Exercise the source requirement without adding behavior: OTP and Password entry field are shown together on the same screen — both must be submitted simultaneously.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_027",
+          "title": "Exercise the source requirement without adding behavior: The OTP field shows \"Enter OTP\" placeholder with a Resend link.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_028",
+          "title": "Exercise the source requirement without adding behavior: Tapping Resend re-dispatches the OTP and shows: \"OTP has been re-sent to your registered mobile and Email-ID.\"",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_029",
+          "title": "Exercise the source requirement without adding behavior: The \"Forgot Code or Password?\" link opens the Geojit Online Activation / Forgot Password web page (US-005).",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_030",
+          "title": "Exercise the source requirement without adding behavior: After 5 total failed attempts, the account is locked and the user must use the Unlock A/C flow (US-005).",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_033",
+          "title": "Exercise the source requirement without adding behavior: The failure recovery view is shown after exactly 3 consecutive failed password attempts — not after the 1st or 2nd failure.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_034",
+          "title": "Exercise the source requirement without adding behavior: OTP is dispatched automatically at the failure threshold — no separate Generate OTP button is required on this screen.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_037",
+          "title": "Exercise the source requirement without adding behavior: OTP resent confirmation text must exactly match: \"OTP has been re-sent to your registered mobile and Email-ID.\"",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_038",
+          "title": "Exercise the source requirement without adding behavior: \"Forgot Code or Password?\" on this screen and \"Forgot ID or Password?\" on the main login screen open the same Geojit Online Activation web page.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        },
+        {
+          "id": "TC_US004_039",
+          "title": "Confirm that a successful OTP and password login on the failure-recovery screen resets the failed-attempt counter to zero.",
+          "status": "missing",
+          "reason": "Blocked: Needs failed login submissions, which count against the account (recovery at 3, lock at 5). No disposable account was approved for failed-attempt or lockout tests, and the failure message/recovery screen of a fresh account was not dumped."
+        }
+      ]
+    },
+    {
+      "story": "US005",
+      "smokeSpec": "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US005.test.ts",
+      "smokeSha256": "f70c0b1b9604292dd4ea6587ecafa7b89586c762a36507a140b7e0e58578358b",
+      "eligible": [
+        {
+          "id": "TC_US005_013",
+          "title": "Exercise the source requirement without adding behavior: Unlock A/C Button: Initiates account unlock for accounts locked after failed login attempts. Type: Button. Mandatory: Yes. Validation: Yes",
+          "status": "missing",
+          "reason": "Blocked: Needs submitting the Geojit web form (unlock / reset password / OTP channel) with real identity data (Customer ID, PAN, registered contact), which starts a live account flow; not approved for automation, and its result screens were not dumped."
+        },
+        {
+          "id": "TC_US005_014",
+          "title": "Exercise the source requirement without adding behavior: Tapping \"Forgot ID or Password?\" on the FundsGenie login screen opens the Geojit Online Activation / Forgot Password web page in an in-app browser.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US005_015",
+          "title": "Exercise the source requirement without adding behavior: The web page (gin.geojit.com) displays: Geojit logo, page title \"Online Activation / Forgot Password\", Trade Code / Customer ID field, PAN Number field, Email ID / Mobile radio toggle, corresponding contact input field, \"Unlock A/C\" button, and \"Reset Password\" button.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US005_016",
+          "title": "Exercise the source requirement without adding behavior: User selects Email ID or Mobile as the OTP delivery channel and fills in the corresponding field.",
+          "status": "missing",
+          "reason": "Blocked: Needs submitting the Geojit web form (unlock / reset password / OTP channel) with real identity data (Customer ID, PAN, registered contact), which starts a live account flow; not approved for automation, and its result screens were not dumped."
+        },
+        {
+          "id": "TC_US005_017",
+          "title": "Exercise the source requirement without adding behavior: Tapping \"Unlock A/C\" initiates the account unlock flow for accounts locked due to failed login attempts.",
+          "status": "missing",
+          "reason": "Blocked: Needs submitting the Geojit web form (unlock / reset password / OTP channel) with real identity data (Customer ID, PAN, registered contact), which starts a live account flow; not approved for automation, and its result screens were not dumped."
+        },
+        {
+          "id": "TC_US005_019",
+          "title": "Exercise the source requirement without adding behavior: Tapping \"Reset Password\" initiates the password reset flow for forgotten passwords.",
+          "status": "missing",
+          "reason": "Blocked: Needs submitting the Geojit web form (unlock / reset password / OTP channel) with real identity data (Customer ID, PAN, registered contact), which starts a live account flow; not approved for automation, and its result screens were not dumped."
+        },
+        {
+          "id": "TC_US005_020",
+          "title": "Exercise the source requirement without adding behavior: The page footer shows: \"Not registered yet? Open an Account\" link, and FAQ / Privacy Policy / Terms of Service / About links.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US005_021",
+          "title": "Exercise the source requirement without adding behavior: Triggering the unlock page before any lockout shows an appropriate message.",
+          "status": "missing",
+          "reason": "Blocked: Needs submitting the Geojit web form (unlock / reset password / OTP channel) with real identity data (Customer ID, PAN, registered contact), which starts a live account flow; not approved for automation, and its result screens were not dumped."
+        },
+        {
+          "id": "TC_US005_022",
+          "title": "Exercise the source requirement without adding behavior: The Forgot Password and Account Unlock flows are entirely hosted on the Geojit web platform — FundsGenie is responsible only for the redirect entry point and return navigation.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US005_023",
+          "title": "Exercise the source requirement without adding behavior: The in-app browser must not store, cache, or auto-fill credentials entered during the web-based flow.",
+          "status": "missing",
+          "reason": "Blocked: Storage, caching and auto-fill of the in-app browser are not observable from the UI hierarchy; proving it would also need credentials typed into the web form."
+        },
+        {
+          "id": "TC_US005_024",
+          "title": "Exercise the source requirement without adding behavior: PAN Number serves as an identity verification step to prevent unauthorised password resets.",
+          "status": "missing",
+          "reason": "Blocked: Needs submitting the Geojit web form (unlock / reset password / OTP channel) with real identity data (Customer ID, PAN, registered contact), which starts a live account flow; not approved for automation, and its result screens were not dumped."
+        },
+        {
+          "id": "TC_US005_025",
+          "title": "Exercise the source requirement without adding behavior: The OTP delivery channel selection is at the user's discretion; the system must validate the entered contact matches the account's registered details.",
+          "status": "missing",
+          "reason": "Blocked: Needs submitting the Geojit web form (unlock / reset password / OTP channel) with real identity data (Customer ID, PAN, registered contact), which starts a live account flow; not approved for automation, and its result screens were not dumped."
+        }
+      ]
+    },
+    {
+      "story": "US006",
+      "smokeSpec": "",
+      "smokeSha256": "",
+      "eligible": [
+        {
+          "id": "TC_US006_032",
+          "title": "Exercise the source requirement without adding behavior: \"Unlock Account\" CTA (Locked): Navigates user to the Forgot Password / Unlock A/C web flow. Type: Button. Mandatory: Conditional. Validation: On tap: open Geojit Online Activation / Forgot Password page in in-app browser (same as US-005).",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US006_034",
+          "title": "Exercise the source requirement without adding behavior: When a login attempt fails due to 5 consecutive failed attempts, a bottom-sheet appears: \"Account Temporarily Locked — 5 unsuccessful login attempts were detected. Contact your branch or customer support.\" with \"Need Help\" and \"Unlock Account\" CTAs.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US006_036",
+          "title": "Exercise the source requirement without adding behavior: Tapping \"Unlock Account\" redirects the user to the Geojit Online Activation / Forgot Password web page (US-005).",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US006_037",
+          "title": "Exercise the source requirement without adding behavior: When a login attempt fails because the account is suspended, a bottom-sheet appears: \"Account Temporarily Suspended — Kindly contact your branch or customer support.\" with \"Close\" and \"Need Help\" CTAs.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US006_043",
+          "title": "Exercise the source requirement without adding behavior: The BE must return distinct, unambiguous error codes for each account state: Locked, Suspended, Transferred, and Closed — to allow the FE to render the correct bottom-sheet and CTAs.",
+          "status": "missing",
+          "reason": "Blocked: Back-end error codes per account state are not shown on the device; needs API-level evidence and locked/suspended/closed accounts."
+        },
+        {
+          "id": "TC_US006_047",
+          "title": "Exercise the source requirement without adding behavior: Account Locked status resets after successful completion of the Unlock A/C flow (US-005); all other statuses (Suspended, Transferred, Closed) require Geojit back-office intervention.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US006_049",
+          "title": "Exercise the source requirement without adding behavior: No partial authentication state is retained after an account status error — the session is fully cleared.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        }
+      ]
+    },
+    {
+      "story": "US007",
+      "smokeSpec": "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US007.test.ts",
+      "smokeSha256": "db12d298ae7bcabd32fea61cfa2c75983a9f1c972e650096a4986b4d706d7633",
+      "eligible": [
+        {
+          "id": "TC_US007_006",
+          "title": "Exercise the source requirement without adding behavior: When a returning user's password is within the expiry warning window (5 days), the login screen shows the pre-filled username and code (e.g., \"Dilip Radhakrishnan VYD083\") with the Password field and an inline red warning: \"Expires in X day(s)\". (Info will be received via API)",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US007_007",
+          "title": "Exercise the source requirement without adding behavior: The warning does not block login — the user can log in normally with the current password.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US007_008",
+          "title": "Exercise the source requirement without adding behavior: Switch Account and Forgot Password? links remain visible alongside the Login button.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US007_009",
+          "title": "Exercise the source requirement without adding behavior: This is applicable for only 3 attempts and not applicable for OTP Flow.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US007_011",
+          "title": "Exercise the source requirement without adding behavior: The password expiry warning window is configurable [5 days before expiry].",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US007_013",
+          "title": "Exercise the source requirement without adding behavior: The expiry warning is informational only — it must not block login while the password is still valid.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US007_014",
+          "title": "Exercise the source requirement without adding behavior: Once the password expires (day 0), the user cannot log in and must reset the password via US-008.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US007_015",
+          "title": "Exercise the source requirement without adding behavior: The pre-filled username and code is a local convenience — the password is never pre-filled.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US007_016",
+          "title": "Exercise the source requirement without adding behavior: \"Sign up now\" and \"Open an Account\" are equivalent entry points to the account opening flow (US-001).",
+          "status": "missing",
+          "reason": "Blocked: \"Sign up now\" showed no navigation within 25 s during inspection and the UI hierarchy became unreadable; the account-opening entry point could not be dumped."
+        }
+      ]
+    },
+    {
+      "story": "US008",
+      "smokeSpec": "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US008.test.ts",
+      "smokeSha256": "bb02490282a21b1d96ce13bc543d58fe6465b499568f7e0539842d22a80178bb",
+      "eligible": [
+        {
+          "id": "TC_US008_026",
+          "title": "Exercise the source requirement without adding behavior: Expiry Days Selector: Pill-style selector allowing user to choose password validity period: 90, 120, or 180 days.. Type: Dropdown / Selection. Mandatory: Yes. Validation: Yes",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US008_027",
+          "title": "Exercise the source requirement without adding behavior: When a user's password has expired, a bottom-sheet prompt appears on the login screen: \"Password Expired — Do you want to change the password now?\" with \"Cancel\" and \"Change Now\" buttons.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US008_028",
+          "title": "Exercise the source requirement without adding behavior: Tapping \"Change Now\" navigates to the Change Password screen with: Current Password, New Password, Retype New Password fields, an Expiry days selector (90 / 120 / 180 days), and the calculated Password Expiry Date.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US008_029",
+          "title": "Exercise the source requirement without adding behavior: The new password must meet Geojit's complexity requirements.",
+          "status": "missing",
+          "reason": "Blocked: Needs submitting a password change with the real current password, which starts a live account flow; not approved for automation, and its result screens were not dumped."
+        },
+        {
+          "id": "TC_US008_030",
+          "title": "Exercise the source requirement without adding behavior: After a successful change, a confirmation bottom-sheet shows: \"Password updated successfully — The new password will expire on [date].\" with a Close button.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US008_031",
+          "title": "Exercise the source requirement without adding behavior: Tapping Close redirects, the user to the login screen. User’s username and code would be visible.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US008_032",
+          "title": "Exercise the source requirement without adding behavior: Dashboard access is blocked until the expired password reset is complete.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US008_034",
+          "title": "Exercise the source requirement without adding behavior: Expired password reset must complete before any Dashboard access — \"Cancel\" on the expiry prompt does not grant access.",
+          "status": "missing",
+          "reason": "Blocked: Needs an account in a state the test accounts are not in (locked, suspended, password expired or inside the expiry warning window); no such account was provided, so the screen could not be dumped or reached."
+        },
+        {
+          "id": "TC_US008_035",
+          "title": "Exercise the source requirement without adding behavior: New password must not match current or last 3 passwords.",
+          "status": "missing",
+          "reason": "Blocked: Needs saving new passwords on the real account (current and last 3 passwords); not approved: it changes the account's credentials."
+        },
+        {
+          "id": "TC_US008_036",
+          "title": "Exercise the source requirement without adding behavior: Passwords stored as salted hashes — plaintext never stored.",
+          "status": "missing",
+          "reason": "Blocked: Salted-hash storage is a back-end property, not visible on the device."
+        },
+        {
+          "id": "TC_US008_038",
+          "title": "Exercise the source requirement without adding behavior: Change Password is also accessible from Profile / Settings for voluntary non-expired changes.",
+          "status": "implemented"
+        }
+      ]
+    },
+    {
+      "story": "US009",
+      "smokeSpec": "",
+      "smokeSha256": "",
+      "eligible": [
+        {
+          "id": "TC_US009_004",
+          "title": "Perform the documented action for OTP Field on the OTP verification screen.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_008",
+          "title": "Perform the documented action for Logout Button (2FA Screen) on the OTP verification screen.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_013",
+          "title": "Exercise the source requirement without adding behavior: OTP Field: Accepts 6-digit OTP dispatched to registered mobile/email. Class A — standard OTP.. Type: Numeric. Mandatory: Yes. Validation: Numeric only. Exactly 6 digits. Auto-submit on 6th digit. Error: \"Invalid OTP. Please try again.\"",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_014",
+          "title": "Exercise the source requirement without adding behavior: The 2FA screen displays three options: Login with OTP, Login with Biometrics, Login with TOTP, and a Logout button.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_015",
+          "title": "Exercise the source requirement without adding behavior: Selecting \"Login with OTP\" navigates to an OTP entry screen with an OTP field.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_016",
+          "title": "Exercise the source requirement without adding behavior: OTP is automatically sent to the user's registered mobile number and email.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_017",
+          "title": "Exercise the source requirement without adding behavior: OTP can be fetched automatically in Android while iOS does not allow it and manual action is needed.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_018",
+          "title": "Exercise the source requirement without adding behavior: Pop-up will appear with Allow/Deny options to enter it automatically or manually. Hence, option to enter it manually should also need to be present. Numeric keypad will be displayed only after user try to enter the OTP manually.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_019",
+          "title": "Exercise the source requirement without adding behavior: After 6th digit is entered, it is auto-submitted. Loader Screen to be displayed while OTP is authenticated.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_020",
+          "title": "Exercise the source requirement without adding behavior: A valid OTP authenticates the user and loads the Dashboard.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_021",
+          "title": "Exercise the source requirement without adding behavior: An invalid OTP shows: \"Incorrect OTP.\" It should clear the entered digits as well.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_023",
+          "title": "Exercise the source requirement without adding behavior: Repeated 3 wrong invalid OTP entries trigger a CAPTCHA challenge before further submission is allowed.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_025",
+          "title": "Exercise the source requirement without adding behavior: User can request a new OTP after 30 seconds. Reverse timer should be displayed.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US009_027",
+          "title": "Exercise the source requirement without adding behavior: CAPTCHA is triggered after 3 consecutive failed OTP attempts to prevent brute-force attacks",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        }
+      ]
+    },
+    {
+      "story": "US010",
+      "smokeSpec": "",
+      "smokeSha256": "",
+      "eligible": [
+        {
+          "id": "TC_US010_003",
+          "title": "Enter or paste a current six-digit TOTP.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US010_017",
+          "title": "Exercise the source requirement without adding behavior: Selecting \"Log in with TOTP\" navigates to the Secure Authentication TOTP screen.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US010_018",
+          "title": "Exercise the source requirement without adding behavior: The screen displays a padlock icon, a 6-digit TOTP entry field, and instruction text: \"Enter TOTP from your TOTP authentication app\". Copy-paste option should be available.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US010_019",
+          "title": "Exercise the source requirement without adding behavior: A valid, non-expired TOTP code authenticates the user and loads the Dashboard.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US010_020",
+          "title": "Exercise the source requirement without adding behavior: An invalid TOTP code shows: \"Incorrect TOTP\" in red below the entry field.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US010_021",
+          "title": "Exercise the source requirement without adding behavior: If TOTP is not yet enabled for the account, a bottom-sheet prompt appears: \"TOTP not enabled — TOTP option is not enabled for the user, do you want to activate the same now?\" with \"Later\" and \"Enable now\" options. Enable Now will start a separate flow. Link will be provided via API while login authentication (Primary Login) response.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US010_023",
+          "title": "Exercise the source requirement without adding behavior: If TOTP is not yet configured for an account, the \"TOTP not enabled\" prompt is shown — the user must either enable TOTP or select an alternative 2FA method.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US010_024",
+          "title": "Exercise the source requirement without adding behavior: Unlike OTP, TOTP does not require network delivery — it is generated locally on the user's authenticator app.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        },
+        {
+          "id": "TC_US010_026",
+          "title": "Exercise the source requirement without adding behavior: The \"Later\" option on the TOTP not-enabled prompt returns the user to the 2FA screen without disrupting the session; the user may proceed with OTP or Biometric instead.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs an OTP delivered to the account holder's phone/email (or a TOTP from an authenticator); the test cannot read it."
+        }
+      ]
+    },
+    {
+      "story": "US011",
+      "smokeSpec": "",
+      "smokeSha256": "",
+      "eligible": [
+        {
+          "id": "TC_US011_021",
+          "title": "Exercise the source requirement without adding behavior: After a successful first-time credential login, FundsGenie displays the \"Use Biometric Authentication\" screen with: FundsGenie magic lamp logo, a face-and-fingerprint illustration, the heading \"Use Biometric Authentication\", body text \"Use biometric login with your fingerprint or face for faster and easier access to your account.\", a note \"You can turn this feature on or off at any time under settings\", an \"Enable Biometric\" button, and a \"Skip for now\" link.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_022",
+          "title": "Exercise the source requirement without adding behavior: Tapping \"Enable Biometric\" triggers the device-native biometric prompt (\"Authentication required\") to register the biometric for FundsGenie.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_023",
+          "title": "Exercise the source requirement without adding behavior: A successful biometric registration enables biometric login for this account on this device and proceeds to the Dashboard.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_024",
+          "title": "Exercise the source requirement without adding behavior: Tapping \"Skip for now\" dismisses the setup screen without enabling biometric and navigates the user to the 2FA screen (US-009 / US-010) to complete login.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_025",
+          "title": "Exercise the source requirement without adding behavior: The biometric setup screen is shown only on the first login. Subsequent logins go directly to the 2FA screen (US-012 if biometric was enabled, or US-009 / US-010 if skipped).",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_026",
+          "title": "Exercise the source requirement without adding behavior: Biometric can be enabled or disabled at any time from Profile / Settings within the app.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_027",
+          "title": "Exercise the source requirement without adding behavior: The \"Use Biometric Authentication\" setup screen is displayed only on the first successful login where biometric has not yet been configured — not on every login.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_028",
+          "title": "Exercise the source requirement without adding behavior: Biometric authentication uses exclusively device-native APIs (Android BiometricPrompt / iOS LocalAuthentication). No biometric data is ever transmitted to or stored on the Geojit server.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_029",
+          "title": "Exercise the source requirement without adding behavior: The device-native prompt title and body text must reference \"FundsGenie\" — not \"Flip\" or any other Geojit app name.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_030",
+          "title": "Exercise the source requirement without adding behavior: Once biometric is enabled, the setup screen does not appear again on subsequent logins. The device-native biometric prompt is triggered directly (US-012).",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_031",
+          "title": "Exercise the source requirement without adding behavior: Biometric enable / disable from Settings uses the same device-native API as the setup flow.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US011_032",
+          "title": "Exercise the source requirement without adding behavior: Logout (US-013) disables biometric auto-login until the next full credential-based login and setup flow.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        }
+      ]
+    },
+    {
+      "story": "US012",
+      "smokeSpec": "",
+      "smokeSha256": "",
+      "eligible": [
+        {
+          "id": "TC_US012_015",
+          "title": "Perform the documented action for Biometric Success on the Android biometric authentication screen.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_020",
+          "title": "Perform the documented action for \"Login with OTP\" Option (2FA Screen) on the Android biometric authentication screen.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_022",
+          "title": "Perform the documented action for Logout Link (2FA Screen) on the Android biometric authentication screen.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_027",
+          "title": "Exercise the source requirement without adding behavior: Device-Native Biometric Prompt (iOS): iOS Face ID / Touch ID system-level prompt. Type: UI Display. Mandatory: Conditional. Validation: Conditional",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_029",
+          "title": "Exercise the source requirement without adding behavior: After successful credential login (US-002 or US-003), if biometric is already enabled for this user-device pair, the device-native \"Authentication required\" prompt is triggered automatically.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_030",
+          "title": "Exercise the source requirement without adding behavior: The prompt displays: app icon (FundsGenie), title \"Authentication required\", subtitle \"Verify identity\", body \"Authenticate to login to FundsGenie\", instruction \"Touch the fingerprint sensor\" (Android) or equivalent Face ID prompt (iOS), and a \"Use pattern\" fallback link.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_031",
+          "title": "Exercise the source requirement without adding behavior: A successful biometric match (fingerprint, Face ID, or pattern) authenticates the user and loads the Dashboard.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_032",
+          "title": "Exercise the source requirement without adding behavior: An unsuccessful biometric attempt shows the device-level retry prompt. The user may retry or tap \"Use pattern\" to fall back to pattern unlock.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_033",
+          "title": "Exercise the source requirement without adding behavior: If the user cancels the biometric prompt: they are returned to the 2FA screen (US-009 / US-010) to complete login using OTP or TOTP.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_034",
+          "title": "Exercise the source requirement without adding behavior: If biometric is not enabled for this user-device pair: the biometric prompt is not shown; user proceeds to the 2FA screen (US-009 / US-010).",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_035",
+          "title": "Exercise the source requirement without adding behavior: The 2FA screen shows the user name and code (e.g., \"DILIP RADHAKRISHNAN / VYD083\"), a \"Login with OTP\" option, and a \"Logout\" link.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_036",
+          "title": "Exercise the source requirement without adding behavior: Biometric authentication uses exclusively device-native APIs (Android BiometricPrompt / iOS LocalAuthentication). No biometric data is ever transmitted to or stored on the Geojit server.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_038",
+          "title": "Exercise the source requirement without adding behavior: The device-native prompt must reference \"FundsGenie\" in the title and body — not \"Flip\" or any other Geojit app name.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_039",
+          "title": "Exercise the source requirement without adding behavior: \"Use pattern\" as a biometric fallback is available on Android devices that support it. Phase 1 scope to be confirmed with Geojit / Dilip.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_040",
+          "title": "Exercise the source requirement without adding behavior: Biometric login is only available if biometric was previously enabled via the setup flow (US-011). If not enabled, the device-native prompt is not triggered.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US012_042",
+          "title": "Exercise the source requirement without adding behavior: Logout (US-013) disables biometric auto-login until the next full credential-based login. After logout, biometric is not triggered automatically on the next app launch.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified. Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        }
+      ]
+    },
+    {
+      "story": "US013",
+      "smokeSpec": "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US013.test.ts",
+      "smokeSha256": "65ee092087337910f4868cbbbcd5cc2b8726c1558d33adf8361a3d23ac33d46b",
+      "eligible": [
+        {
+          "id": "TC_US013_001",
+          "title": "Perform the documented action for Logout Button / Link (2FA Screen) on the logout flow.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified."
+        },
+        {
+          "id": "TC_US013_003",
+          "title": "Perform the documented action for Logout Option (In-App) on the logout flow.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US013_006",
+          "title": "Verify the session and username state immediately after logout.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US013_008",
+          "title": "Use Android Back after logout and verify the authenticated screen does not return.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US013_009",
+          "title": "Exercise the source requirement without adding behavior: Name: Role. Type: Organization. Mandatory: Signature. Validation: Signature",
+          "status": "missing",
+          "reason": "Blocked: The workbook row is document sign-off metadata (\"Name: Role. Type: Organization ...\"), not app behaviour; there is nothing on the device to assert. Needs a workbook correction."
+        },
+        {
+          "id": "TC_US013_010",
+          "title": "Exercise the source requirement without adding behavior: [Client Representative]: Client Representative. Type: Geojit Technologies. Mandatory: . Validation:",
+          "status": "missing",
+          "reason": "Blocked: The workbook row is document sign-off metadata (client representative), not app behaviour; nothing to assert on the device. Needs a workbook correction."
+        },
+        {
+          "id": "TC_US013_011",
+          "title": "Exercise the source requirement without adding behavior: Vibhor Lele: Business Analyst. Type: SnapWork Technologies. Mandatory: . Validation:",
+          "status": "missing",
+          "reason": "Blocked: The workbook row is document sign-off metadata (business analyst), not app behaviour; nothing to assert on the device. Needs a workbook correction."
+        },
+        {
+          "id": "TC_US013_012",
+          "title": "Exercise the source requirement without adding behavior: A Logout option is visible on the 2FA screen and within the application.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified."
+        },
+        {
+          "id": "TC_US013_013",
+          "title": "Exercise the source requirement without adding behavior: On the 2FA screen, logout is shown as a \"Logout\" text link with an arrow icon at the bottom of the option list.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified."
+        },
+        {
+          "id": "TC_US013_014",
+          "title": "Exercise the source requirement without adding behavior: When the account name is shown (e.g., \"Jaydeep Nandhu / Usercode: AAN268\"), the logout option appears below the 2FA method list.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified."
+        },
+        {
+          "id": "TC_US013_015",
+          "title": "Exercise the source requirement without adding behavior: Tapping Logout clears the active session and returns the user to the login screen with user name.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US013_016",
+          "title": "Exercise the source requirement without adding behavior: After logout, biometric auto-login is disabled until the next explicit credential-based login.",
+          "status": "missing",
+          "reason": "Blocked: Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US013_017",
+          "title": "Exercise the source requirement without adding behavior: All cached portfolio and transaction data becomes inaccessible after logout.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US013_019",
+          "title": "Exercise the source requirement without adding behavior: After logout, all cached portfolio and transaction data is inaccessible without re-authentication.",
+          "status": "implemented"
+        },
+        {
+          "id": "TC_US013_020",
+          "title": "Exercise the source requirement without adding behavior: Biometric auto-login is bound to an active session; logout breaks that binding.",
+          "status": "missing",
+          "reason": "Blocked: Needs the device-native biometric prompt and an enrolled fingerprint/face; UiAutomator2 cannot pass a biometric check, and biometric login is not enabled for the test account."
+        },
+        {
+          "id": "TC_US013_021",
+          "title": "Exercise the source requirement without adding behavior: The Logout option on the 2FA screen must be clearly visible at the bottom of the 2FA method options list.",
+          "status": "missing",
+          "reason": "Blocked: 2FA screen not reachable on the device: the normal test account (LOGIN_NORMAL) logs in straight to the Dashboard with no 2FA screen, and the 2FA test account (LOGIN_2FA) opened the failed-attempt recovery view (OTP + Password) on its only inspection login, so the 2FA screen was never dumped and no locator can be verified."
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "eligible": 145,
+    "implemented": 23,
+    "missing": 122
+  },
+  "coverageComplete": false
+}

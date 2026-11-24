@@ -1,0 +1,12 @@
+{
+  "application": "{{APPLICATION_NAME}}",
+  "projectKey": null,
+  "baseUrl": null,
+  "recordedOn": null,
+  "assigneeDisplayName": null,
+  "epic": null,
+  "bugs": [],
+  "notes": [
+    "Written only by .github/skills/smoke-bugs-to-jira/scripts/jira_bugs.py record, after each issue was re-opened and verified in Jira. Do not edit by hand."
+  ]
+}

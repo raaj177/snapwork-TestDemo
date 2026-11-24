@@ -1,0 +1,679 @@
+{
+  "run_id": "2026-11-23T00-00",
+  "layout": "setup-first-v1",
+  "current_phase": 4,
+  "inputs": {
+    "story_source": "local",
+    "user_story_files": [
+      "GFG_EPIC001_Login_Authentication_v5 3.docx"
+    ]
+  },
+  "phases": {
+    "1_automation_setup": {
+      "status": "completed",
+      "inputs": {
+        "platform": "Mobile",
+        "mobile_platform": "Android + iOS",
+        "automation_dir": "<WorkspaceRoot>/Automation",
+        "app": "no app yet",
+        "jenkins_nodejs_tool": "NodeJS-24",
+        "jenkins_pipelines": "Mobile only",
+        "npm_install_approved": true
+      },
+      "output": {
+        "automation_root": "<WorkspaceRoot>/Automation",
+        "platform": "Mobile",
+        "mobile_platform": "Android + iOS",
+        "mobile_dir": "<WorkspaceRoot>/Automation",
+        "web_dir": null,
+        "testcase_dir": "<WorkspaceRoot>/Automation/testcase",
+        "layout": "flat",
+        "npm_name": "universal-kits-automation",
+        "created": true,
+        "jenkins": {
+          "file": "Automation/jenkins/Jenkinsfile.mobile",
+          "script_path": "Automation/jenkins/Jenkinsfile.mobile",
+          "nodejs_tool": "NodeJS-24"
+        },
+        "validations": {
+          "npm_install": "passed (pinned, package-lock.json written)",
+          "appium_drivers": "passed (uiautomator2@10.0.0, xcuitest@13.6.1 installed (npm))",
+          "typecheck": "passed",
+          "lint": "passed",
+          "format_check": "passed",
+          "json_parse": "passed",
+          "config_load_without_session": "passed",
+          "structure_and_testcase_folders": "passed",
+          "private_scan": "passed",
+          "jira_folder": "passed",
+          "env_file": "passed (app values empty, deferred)",
+          "gitignore": "passed (checked in a temporary git repo; Automation/ is not a git work tree)",
+          "scripts_dry_run_help": "passed",
+          "smoke_tooling_tests": "passed 12/12",
+          "run_commands_tests": "passed 13/13",
+          "report_share_tests": "passed 11/11 (incl. real Allure single-file)",
+          "test_data_tests": "passed 10/10",
+          "smoke_missing_workbook_dry_run": "passed (exit 2)",
+          "placeholder_scan": "passed",
+          "jenkins_placeholders": "passed (0 left)"
+        },
+        "deferred": [
+          "APP_PACKAGE",
+          "APP_ACTIVITY",
+          "BUNDLE_ID",
+          "APP_PATH",
+          "application display name"
+        ]
+      }
+    },
+    "2_test_case_generation": {
+      "status": "completed",
+      "inputs": {
+        "project_mode": "GREENFIELD",
+        "user_stories": [
+          ".github/_requirements/user_stories/GFG_EPIC001_Login_Authentication_v5 3.docx"
+        ],
+        "scope": "full document",
+        "platform": "Mobile App",
+        "mobile_sub_platform": "Both Android and iOS",
+        "platform_consistency": "matches Phase 1 Mobile (Android + iOS)"
+      },
+      "output": {
+        "workbook_path": "<WorkspaceRoot>/Automation/testcase/Generated Testcases/GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_0.xlsx",
+        "doc_name": "GFG_EPIC001_Login_Authentication_v5 3",
+        "user_story": "<WorkspaceRoot>/.github/_requirements/user_stories/GFG_EPIC001_Login_Authentication_v5 3.docx",
+        "project_mode": "GREENFIELD",
+        "scope": "full document",
+        "story_ids": [
+          "US001",
+          "US002",
+          "US003",
+          "US004",
+          "US005",
+          "US006",
+          "US007",
+          "US008",
+          "US009",
+          "US010",
+          "US011",
+          "US012",
+          "US013"
+        ],
+        "platform_type": "mobile app",
+        "platform": "Mobile App - Both Android and iOS",
+        "cases": 244,
+        "skeleton_cases": 226,
+        "recovered_cases": 18,
+        "source_types": {
+          "SOURCE": 230,
+          "DERIVED": 1,
+          "ADVISORY": 0,
+          "BLOCKED": 13
+        },
+        "priority": {
+          "P0": 61,
+          "P1": 140,
+          "P2": 43
+        },
+        "automation_candidates": 224,
+        "automation_no": 20,
+        "ios_selected": 92,
+        "regression_yes": 120,
+        "build": {
+          "status": "success",
+          "total_errors": 0,
+          "preflight_status": "success",
+          "preflight_warnings": 0,
+          "structural": "success",
+          "recalc": "skipped (LibreOffice not available)"
+        },
+        "gap_recovery": {
+          "status": "success",
+          "total_gaps": 24,
+          "recovered": 18,
+          "unrecoverable": 6,
+          "controls": "14/14 PASS"
+        },
+        "readiness": "READY WITH QUESTIONS",
+        "verdict": "REVIEW REQUIRED",
+        "baseline": "DRAFT - NOT BASELINED",
+        "requirement_questions": [
+          "RQ-01",
+          "RQ-02",
+          "RQ-03",
+          "RQ-04",
+          "RQ-05",
+          "RQ-06",
+          "RQ-07",
+          "RQ-08",
+          "RQ-09",
+          "RQ-11",
+          "RQ-12",
+          "RQ-13",
+          "RQ-15",
+          "RQ-16",
+          "RQ-17",
+          "RQ-18"
+        ],
+        "cases_json": "C:/Users/PRINCE~1/AppData/Local/Temp/claude/c397093148456c49/4d23fa8e-56de-41b7-811e-0df5f5f2386b/scratchpad/cases_GFG_EPIC001_final.json"
+      }
+    },
+    "3_test_case_review": {
+      "status": "stopped",
+      "inputs": {
+        "files": [
+          "GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_0.xlsx"
+        ],
+        "user_story": ".github/_requirements/user_stories/GFG_EPIC001_Login_Authentication_v5 3.docx",
+        "scope": "full document",
+        "evidence": "none (adr/, api_specs/, designs/ empty) - limitation",
+        "gate": {
+          "full_min": 90,
+          "risk_weighted_min": 90,
+          "max_revisions": 3
+        },
+        "confirmed": "user: proceed"
+      },
+      "output": {
+        "files": {
+          "GFG_EPIC001_Login_Authentication_v5 3": {
+            "versions": [
+              {
+                "workbook": "Generated Testcases/GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_0.xlsx",
+                "review": "Review Reports/GFG_EPIC001_Login_Authentication_v5 3_TestCase_Review_v1_0.xlsx",
+                "coverage": {
+                  "full": "82.7%",
+                  "risk_weighted": "94.1%"
+                },
+                "gate": "failed",
+                "quality_score": 83,
+                "verdict": "REVIEW REQUIRED",
+                "findings": {
+                  "Low": 13,
+                  "Medium": 31,
+                  "High": 3,
+                  "Info": 9
+                },
+                "reviewer_gate10": "PASS",
+                "review_mode": "FULL (no previous cache)"
+              }
+            ],
+            "approved_workbook": null,
+            "result": "STOPPED BY USER after v1_0 review (gate not passed; no revision run)",
+            "open_questions": [
+              "RQ-01",
+              "RQ-02",
+              "RQ-03",
+              "RQ-04",
+              "RQ-05",
+              "RQ-06",
+              "RQ-07",
+              "RQ-08",
+              "RQ-09",
+              "RQ-13",
+              "RQ-15",
+              "RQ-17",
+              "RQ-18",
+              "RQ-R01",
+              "RQ-R02"
+            ]
+          }
+        },
+        "note": "Testcases/GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx (dated 2026-11-16) was found in Testcases/ during this run; it was not written by this cycle and was left untouched."
+      },
+      "reason": "stopped by user after first review report"
+    },
+    "4_implement_testcases": {
+      "status": "in_progress",
+      "inputs": {
+        "override": "user chose to implement unreviewed v1_1 in Testcases/ although no version passed the Phase 3 gate",
+        "input_workbook": "Automation/testcase/Testcases/GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx",
+        "platform": "Android (iOS deferred: no build, Windows host)",
+        "scope": "P0 smoke first (all stories, Automation Candidate=Yes, Priority=P0)",
+        "app_build": "Automation/apps/android/app-debug.apk",
+        "app_package": "com.geojit.fg.sit",
+        "app_activity": "com.geojit.fg.MainActivity",
+        "device": "Android 16 (serial masked)",
+        "test_accounts": ".env LOGIN_NORMAL_*, LOGIN_2FA_*"
+      },
+      "output": {
+        "platform": "Android",
+        "framework": "<WorkspaceRoot>/Automation",
+        "input_workbook": "Automation/testcase/Testcases/GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx",
+        "logic": [
+          "SKILL.md",
+          "references/shared-rules.md",
+          "references/platforms.md",
+          "references/automation-playbook.md",
+          "references/typescript-wdio-standards.md",
+          "assets/page-object-template.md",
+          "assets/testcase-method-template.md",
+          "references/flutter.md",
+          "references/regression-layout.md",
+          "references/p0-smoke.md",
+          "references/run-scripts.md",
+          "assets/handoff-format.md",
+          "assets/retry-framework.md"
+        ],
+        "stories": {
+          "US001": {
+            "P0": {
+              "implemented": 0,
+              "blocked": 0
+            },
+            "P1_P2": {
+              "implemented": 0,
+              "blocked": 17
+            }
+          },
+          "US002": {
+            "P0": {
+              "implemented": 4,
+              "blocked": 10
+            },
+            "P1_P2": {
+              "implemented": 17,
+              "blocked": 4
+            }
+          },
+          "US003": {
+            "P0": {
+              "implemented": 5,
+              "blocked": 5
+            },
+            "P1_P2": {
+              "implemented": 17,
+              "blocked": 1
+            }
+          },
+          "US004": {
+            "P0": {
+              "implemented": 0,
+              "blocked": 15
+            },
+            "P1_P2": {
+              "implemented": 0,
+              "blocked": 17
+            }
+          },
+          "US005": {
+            "P0": {
+              "implemented": 4,
+              "blocked": 8
+            },
+            "P1_P2": {
+              "implemented": 5,
+              "blocked": 6
+            }
+          },
+          "US006": {
+            "P0": {
+              "implemented": 0,
+              "blocked": 7
+            },
+            "P1_P2": {
+              "implemented": 0,
+              "blocked": 37
+            }
+          },
+          "US007": {
+            "P0": {
+              "implemented": 2,
+              "blocked": 7
+            },
+            "P1_P2": {
+              "implemented": 1,
+              "blocked": 3
+            }
+          },
+          "US008": {
+            "P0": {
+              "implemented": 2,
+              "blocked": 9
+            },
+            "P1_P2": {
+              "implemented": 3,
+              "blocked": 21
+            }
+          },
+          "US009": {
+            "P0": {
+              "implemented": 0,
+              "blocked": 14
+            },
+            "P1_P2": {
+              "implemented": 0,
+              "blocked": 9
+            }
+          },
+          "US010": {
+            "P0": {
+              "implemented": 0,
+              "blocked": 9
+            },
+            "P1_P2": {
+              "implemented": 0,
+              "blocked": 14
+            }
+          },
+          "US011": {
+            "P0": {
+              "implemented": 0,
+              "blocked": 12
+            },
+            "P1_P2": {
+              "implemented": 1,
+              "blocked": 18
+            }
+          },
+          "US012": {
+            "P0": {
+              "implemented": 0,
+              "blocked": 16
+            },
+            "P1_P2": {
+              "implemented": 0,
+              "blocked": 20
+            }
+          },
+          "US013": {
+            "P0": {
+              "implemented": 6,
+              "blocked": 10
+            },
+            "P1_P2": {
+              "implemented": 1,
+              "blocked": 1
+            }
+          }
+        },
+        "compile": {
+          "typecheck": "passed",
+          "lint": "passed",
+          "format_check": "passed"
+        },
+        "device_free_tests": {
+          "test-data:test": "10/10 pass",
+          "smoke:test": "12/12 pass",
+          "run-commands:test": "exit 0",
+          "report:share:test": "exit 0"
+        },
+        "smoke_gate": {
+          "workbook": "GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx",
+          "manifest": "Automation/src/tests/smoke/generated/GFG_EPIC001_Login_Authentication_v5 3/manifest.json",
+          "smoke_specs": [
+            "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US002.test.ts",
+            "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US003.test.ts",
+            "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US005.test.ts",
+            "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US007.test.ts",
+            "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US008.test.ts",
+            "src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/US013.test.ts"
+          ],
+          "eligible": 145,
+          "implemented": 23,
+          "missing": 122,
+          "check": "COVERAGE INCOMPLETE: 122 missing",
+          "per_story": {
+            "US002": {
+              "eligible": 14,
+              "implemented_ids": [
+                "TC_US002_025",
+                "TC_US002_027",
+                "TC_US002_029",
+                "TC_US002_040"
+              ],
+              "missing_ids": [
+                "TC_US002_017",
+                "TC_US002_019",
+                "TC_US002_026",
+                "TC_US002_028",
+                "TC_US002_031",
+                "TC_US002_033",
+                "TC_US002_034",
+                "TC_US002_038",
+                "TC_US002_041",
+                "TC_US002_043"
+              ]
+            },
+            "US003": {
+              "eligible": 10,
+              "implemented_ids": [
+                "TC_US003_020",
+                "TC_US003_021",
+                "TC_US003_022",
+                "TC_US003_024",
+                "TC_US003_028"
+              ],
+              "missing_ids": [
+                "TC_US003_016",
+                "TC_US003_023",
+                "TC_US003_025",
+                "TC_US003_029",
+                "TC_US003_032"
+              ]
+            },
+            "US004": {
+              "eligible": 15,
+              "implemented_ids": [],
+              "missing_ids": [
+                "TC_US004_003",
+                "TC_US004_015",
+                "TC_US004_017",
+                "TC_US004_023",
+                "TC_US004_024",
+                "TC_US004_026",
+                "TC_US004_027",
+                "TC_US004_028",
+                "TC_US004_029",
+                "TC_US004_030",
+                "TC_US004_033",
+                "TC_US004_034",
+                "TC_US004_037",
+                "TC_US004_038",
+                "TC_US004_039"
+              ]
+            },
+            "US005": {
+              "eligible": 12,
+              "implemented_ids": [
+                "TC_US005_014",
+                "TC_US005_015",
+                "TC_US005_020",
+                "TC_US005_022"
+              ],
+              "missing_ids": [
+                "TC_US005_013",
+                "TC_US005_016",
+                "TC_US005_017",
+                "TC_US005_019",
+                "TC_US005_021",
+                "TC_US005_023",
+                "TC_US005_024",
+                "TC_US005_025"
+              ]
+            },
+            "US006": {
+              "eligible": 7,
+              "implemented_ids": [],
+              "missing_ids": [
+                "TC_US006_032",
+                "TC_US006_034",
+                "TC_US006_036",
+                "TC_US006_037",
+                "TC_US006_043",
+                "TC_US006_047",
+                "TC_US006_049"
+              ]
+            },
+            "US007": {
+              "eligible": 9,
+              "implemented_ids": [
+                "TC_US007_008",
+                "TC_US007_015"
+              ],
+              "missing_ids": [
+                "TC_US007_006",
+                "TC_US007_007",
+                "TC_US007_009",
+                "TC_US007_011",
+                "TC_US007_013",
+                "TC_US007_014",
+                "TC_US007_016"
+              ]
+            },
+            "US008": {
+              "eligible": 11,
+              "implemented_ids": [
+                "TC_US008_026",
+                "TC_US008_038"
+              ],
+              "missing_ids": [
+                "TC_US008_027",
+                "TC_US008_028",
+                "TC_US008_029",
+                "TC_US008_030",
+                "TC_US008_031",
+                "TC_US008_032",
+                "TC_US008_034",
+                "TC_US008_035",
+                "TC_US008_036"
+              ]
+            },
+            "US009": {
+              "eligible": 14,
+              "implemented_ids": [],
+              "missing_ids": [
+                "TC_US009_004",
+                "TC_US009_008",
+                "TC_US009_013",
+                "TC_US009_014",
+                "TC_US009_015",
+                "TC_US009_016",
+                "TC_US009_017",
+                "TC_US009_018",
+                "TC_US009_019",
+                "TC_US009_020",
+                "TC_US009_021",
+                "TC_US009_023",
+                "TC_US009_025",
+                "TC_US009_027"
+              ]
+            },
+            "US010": {
+              "eligible": 9,
+              "implemented_ids": [],
+              "missing_ids": [
+                "TC_US010_003",
+                "TC_US010_017",
+                "TC_US010_018",
+                "TC_US010_019",
+                "TC_US010_020",
+                "TC_US010_021",
+                "TC_US010_023",
+                "TC_US010_024",
+                "TC_US010_026"
+              ]
+            },
+            "US011": {
+              "eligible": 12,
+              "implemented_ids": [],
+              "missing_ids": [
+                "TC_US011_021",
+                "TC_US011_022",
+                "TC_US011_023",
+                "TC_US011_024",
+                "TC_US011_025",
+                "TC_US011_026",
+                "TC_US011_027",
+                "TC_US011_028",
+                "TC_US011_029",
+                "TC_US011_030",
+                "TC_US011_031",
+                "TC_US011_032"
+              ]
+            },
+            "US012": {
+              "eligible": 16,
+              "implemented_ids": [],
+              "missing_ids": [
+                "TC_US012_015",
+                "TC_US012_020",
+                "TC_US012_022",
+                "TC_US012_027",
+                "TC_US012_029",
+                "TC_US012_030",
+                "TC_US012_031",
+                "TC_US012_032",
+                "TC_US012_033",
+                "TC_US012_034",
+                "TC_US012_035",
+                "TC_US012_036",
+                "TC_US012_038",
+                "TC_US012_039",
+                "TC_US012_040",
+                "TC_US012_042"
+              ]
+            },
+            "US013": {
+              "eligible": 16,
+              "implemented_ids": [
+                "TC_US013_003",
+                "TC_US013_006",
+                "TC_US013_008",
+                "TC_US013_015",
+                "TC_US013_017",
+                "TC_US013_019"
+              ],
+              "missing_ids": [
+                "TC_US013_001",
+                "TC_US013_009",
+                "TC_US013_010",
+                "TC_US013_011",
+                "TC_US013_012",
+                "TC_US013_013",
+                "TC_US013_014",
+                "TC_US013_016",
+                "TC_US013_020",
+                "TC_US013_021"
+              ]
+            }
+          }
+        },
+        "dry_runs": {
+          "smoke": "candidates 145, implemented 23, missing 122, excluded 0, selected 23, preflight passed (exit 0)",
+          "regression": "candidates 358, implemented 23, missing 335, excluded 0, selected 23 (exit 0)",
+          "run-tests.ps1 -Type first -DryRun": "23 rows selected (exit 0)"
+        },
+        "locators_verified": "68 of 68 on the device dumps",
+        "device_run": "none (the skill never runs tests)",
+        "run_command": ".\run -Type first   |   npm run smoke -- \"GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx\"   |   npm run regression -- \"GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx\"",
+        "smoke_command_partial": "npm run smoke:run -- --workbook \"GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx\" --platform android --partial",
+        "workbook_commands": [
+          "npm run smoke -- \"GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx\"",
+          "npm run regression -- \"GFG_EPIC001_Login_Authentication_v5 3_TestCases_v1_1.xlsx\""
+        ],
+        "ios": "deferred (no build, Windows host); iOS page variants not written",
+        "notes": [
+          "LOGIN_2FA account opened the failed-attempt recovery view on its only inspection login (no further attempts made); check its failed-attempt count",
+          "device left logged out on the normal account returning-user screen"
+        ],
+        "layout_change": "2026-11-24: P0 cases moved to src/tests/smoke/GFG_EPIC001_Login_Authentication_v5 3/<Story>.test.ts (only copy); regression folder holds P1/P2 only (none implemented yet). Specs call methods only; steps logged in page/service methods.",
+        "totals": {
+          "candidates": 358,
+          "implemented": 68,
+          "P0_implemented": 23,
+          "P1_P2_implemented": 45
+        },
+        "smoke_check": "COVERAGE INCOMPLETE: 122 missing (no MISPLACED/MISMATCH/TITLE/DUPLICATE/STALE)",
+        "regression_dry_run": "358 candidates, 68 implemented, 290 missing, 0 excluded, 68 selected",
+        "smoke_dry_run": "145 candidates, 23 implemented, 122 missing, 23 selected",
+        "known_failing_expectations": [
+          "TC_US002_040 (Login needs >=6 Customer ID and >=8 password chars)",
+          "TC_US003_005/TC_US003_007 (app text \"Enter a valid 10-digit mobile number.\")",
+          "TC_US008_020 (app date format d/M/yyyy)"
+        ]
+      },
+      "reason": "smoke coverage incomplete: 122 P0 cases Blocked by user decisions / unavailable states"
+    }
+  }
+}

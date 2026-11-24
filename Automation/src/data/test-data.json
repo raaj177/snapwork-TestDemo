@@ -1,0 +1,19 @@
+{
+    "common": {
+        "users": {
+            "normalUser": {
+                "username": "{{env:LOGIN_NORMAL_USERNAME}}",
+                "passwordEnv": "LOGIN_NORMAL_PASSWORD",
+                "description": "Customer ID account that logs in to the Dashboard; values only in .env / CI credentials"
+            }
+        },
+        "messages": {},
+        "values": {
+            "sampleCustomerId": "AAN268",
+            "sampleMobileNumber": "9000000000",
+            "samplePassword": "Test@Pass123"
+        }
+    },
+    "overrides": { "android": {}, "ios": {} },
+    "environments": {}
+}

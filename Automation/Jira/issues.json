@@ -1,0 +1,12 @@
+{
+    "application": "Universal kits (app name deferred: read from the app build in Phase 4)",
+    "projectKey": null,
+    "baseUrl": null,
+    "recordedOn": null,
+    "assigneeDisplayName": null,
+    "epic": null,
+    "bugs": [],
+    "notes": [
+        "Written only by .github/skills/smoke-bugs-to-jira/scripts/jira_bugs.py record, after each issue was re-opened and verified in Jira. Do not edit by hand."
+    ]
+}

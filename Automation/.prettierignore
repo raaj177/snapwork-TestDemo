@@ -1,0 +1,16 @@
+node_modules/
+package-lock.json
+allure-results/
+allure-report/
+test-results/
+report/
+reports/
+logs/
+screenshots/
+testcase/
+evidence/
+apps/
+jenkins/
+*.md
+src/tests/smoke/generated/
+suites/*/

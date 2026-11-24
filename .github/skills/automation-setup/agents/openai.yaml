@@ -1,0 +1,4 @@
+interface:
+  display_name: "Automation Setup"
+  short_description: "Create the reusable automation foundation: Mobile (TypeScript + WebdriverIO + Appium), Web (TypeScript + Playwright) or Mobile + Web"
+  default_prompt: "Use $automation-setup to create or complete a project-neutral automation foundation without processing workbooks or running device or browser tests: Mobile (TypeScript, WebdriverIO, Appium, Mocha, Allure) directly in Automation/, Web (TypeScript, Playwright, Allure) in Automation/Web/, or Mobile + Web in Automation/Mobile/ and Automation/Web/ with jenkins/, CI, docs, README and .gitignore shared at Automation/. Ask the mandatory intake questions first, one at a time, waiting for each answer before the next, and never guess project values."
