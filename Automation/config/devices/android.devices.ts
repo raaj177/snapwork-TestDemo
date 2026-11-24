@@ -1,4 +1,5 @@
 import { env } from '../env';
+import { appBuildPath } from './app-path';
 import { logger, describeError } from '../../src/utils/Logger';
 
 const log = logger.child({ module: 'android.devices' });
@@ -25,7 +26,8 @@ export function androidCapabilities(): WebdriverIO.Capabilities {
         if (env.DEVICE_UDID) caps['appium:udid'] = env.DEVICE_UDID;
         if (env.DEVICE_NAME) caps['appium:deviceName'] = env.DEVICE_NAME;
         if (env.PLATFORM_VERSION) caps['appium:platformVersion'] = env.PLATFORM_VERSION;
-        if (env.APP_PATH) caps['appium:app'] = env.APP_PATH;
+        const app = appBuildPath();
+        if (app) caps['appium:app'] = app;
         if (env.APP_PACKAGE) caps['appium:appPackage'] = env.APP_PACKAGE;
         if (env.APP_ACTIVITY) caps['appium:appActivity'] = env.APP_ACTIVITY;
         log.info(`Android capabilities built (package set: ${Boolean(env.APP_PACKAGE)}, udid set: ${Boolean(env.DEVICE_UDID)})`);

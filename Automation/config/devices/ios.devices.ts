@@ -1,4 +1,5 @@
 import { env } from '../env';
+import { appBuildPath } from './app-path';
 import { logger, describeError } from '../../src/utils/Logger';
 
 const log = logger.child({ module: 'ios.devices' });
@@ -18,7 +19,8 @@ export function iosCapabilities(): WebdriverIO.Capabilities {
         if (env.DEVICE_UDID) caps['appium:udid'] = env.DEVICE_UDID;
         if (env.DEVICE_NAME) caps['appium:deviceName'] = env.DEVICE_NAME;
         if (env.PLATFORM_VERSION) caps['appium:platformVersion'] = env.PLATFORM_VERSION;
-        if (env.APP_PATH) caps['appium:app'] = env.APP_PATH;
+        const app = appBuildPath();
+        if (app) caps['appium:app'] = app;
         if (env.BUNDLE_ID) caps['appium:bundleId'] = env.BUNDLE_ID;
         log.info(`iOS capabilities built (bundle set: ${Boolean(env.BUNDLE_ID)}, udid set: ${Boolean(env.DEVICE_UDID)})`);
         return caps as WebdriverIO.Capabilities;
