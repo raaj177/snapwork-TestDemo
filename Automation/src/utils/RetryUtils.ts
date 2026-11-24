@@ -26,7 +26,11 @@ export async function retry<T>(action: () => Promise<T>, description: string, at
 }
 
 /** Messages that show the UiAutomator2 server froze or died; the run script uses the same markers. */
+/** Message of a check stopped by its hard deadline (BasePage.withDeadline): treated as a server freeze. */
+export const SERVER_NOT_RESPONDING = 'UiAutomator2 server not responding';
+
 export const HANG_MARKERS = [
+    SERVER_NOT_RESPONDING,
     'Could not proxy command',
     'instrumentation process is not running',
     'Appium session creation failed',

@@ -5,6 +5,7 @@ import { registerSensitive } from '../../utils/Redactor';
 import { TIMEOUTS } from '../../constants/timeouts';
 import { AllureEvidence } from '../../reporting/AllureEvidence';
 import { GestureUtils } from '../../utils/GestureUtils';
+import { SERVER_NOT_RESPONDING } from '../../utils/RetryUtils';
 import * as Locators from '../../utils/Locators';
 import type { ElementLocator } from '../../utils/Locators';
 
@@ -188,14 +189,47 @@ export abstract class BasePage {
 
     // ---- polling checks for verify... methods ----
     /** Expects the element to be displayed; captures popups once shown. */
+    /**
+     * Hard deadline for one check: its own wait + 30 s. A frozen UiAutomator2 server makes single commands hang for
+     * minutes (connectionRetryTimeout x retries) and a poll's own wait cannot interrupt them; past the deadline the check
+     * fails with a server-freeze message, so the test ends at once and the next test gets a fresh session.
+     */
+    protected async withDeadline<T>(work: Promise<T>, waitMs: number, description: string): Promise<T> {
+        this.logger.debug(`Deadline ${Math.round((waitMs + 30000) / 1000)} s for ${description}`);
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        try {
+            const deadline = new Promise<never>((_, reject) => {
+                timer = setTimeout(
+                    () =>
+                        reject(
+                            new Error(
+                                `${SERVER_NOT_RESPONDING}: no answer while checking ${description} within ${Math.round((waitMs + 30000) / 1000)} s`,
+                            ),
+                        ),
+                    waitMs + 30000,
+                );
+            });
+            return await Promise.race([work, deadline]);
+        } catch (error) {
+            this.logger.error(`Check stopped for ${description}: ${describeError(error)}`);
+            throw error;
+        } finally {
+            if (timer) clearTimeout(timer);
+        }
+    }
+
     async expectDisplayed(locator: ElementLocator, description: string, timeout: number = TIMEOUTS.standard): Promise<void> {
         this.logger.debug(`Checking that ${description} is displayed`);
         try {
-            await expect(locator()).toBeDisplayed({
-                wait: timeout,
-                interval: TIMEOUTS.pollInterval,
-                message: `${description} was not displayed within ${timeout / 1000} s`,
-            });
+            await this.withDeadline(
+                expect(locator()).toBeDisplayed({
+                    wait: timeout,
+                    interval: TIMEOUTS.pollInterval,
+                    message: `${description} was not displayed within ${timeout / 1000} s`,
+                }),
+                timeout,
+                description,
+            );
             if (POPUP.test(description)) await this.captureScreen(description);
             this.logger.debug(`${description} is displayed`);
         } catch (error) {
@@ -215,8 +249,10 @@ export abstract class BasePage {
         this.logger.debug(`Checking the text of ${description}`);
         try {
             const options = { wait: timeout, interval: TIMEOUTS.pollInterval, message: `${description} did not show the expected text` };
-            if (contains) await expect(locator()).toHaveText(expect.stringContaining(expected), options);
-            else await expect(locator()).toHaveText(expected, options);
+            const check = contains
+                ? expect(locator()).toHaveText(expect.stringContaining(expected), options)
+                : expect(locator()).toHaveText(expected, options);
+            await this.withDeadline(check, timeout, description);
             this.logger.debug(`${description} shows the expected text`);
         } catch (error) {
             this.logger.error(`Check failed: text of ${description}: ${describeError(error)}`);
@@ -234,11 +270,15 @@ export abstract class BasePage {
     ): Promise<void> {
         this.logger.debug(`Checking attribute ${attribute} of ${description}`);
         try {
-            await expect(locator()).toHaveAttribute(attribute, expected, {
-                wait: timeout,
-                interval: TIMEOUTS.pollInterval,
-                message: `${description} ${attribute} differs`,
-            });
+            await this.withDeadline(
+                expect(locator()).toHaveAttribute(attribute, expected, {
+                    wait: timeout,
+                    interval: TIMEOUTS.pollInterval,
+                    message: `${description} ${attribute} differs`,
+                }),
+                timeout,
+                description,
+            );
             this.logger.debug(`${description} has the expected ${attribute}`);
         } catch (error) {
             this.logger.error(`Check failed: attribute ${attribute} of ${description}: ${describeError(error)}`);
@@ -250,11 +290,15 @@ export abstract class BasePage {
     async expectEnabled(locator: ElementLocator, description: string, timeout: number = TIMEOUTS.standard): Promise<void> {
         this.logger.debug(`Checking that ${description} is enabled`);
         try {
-            await expect(locator()).toBeEnabled({
-                wait: timeout,
-                interval: TIMEOUTS.pollInterval,
-                message: `${description} was not enabled`,
-            });
+            await this.withDeadline(
+                expect(locator()).toBeEnabled({
+                    wait: timeout,
+                    interval: TIMEOUTS.pollInterval,
+                    message: `${description} was not enabled`,
+                }),
+                timeout,
+                description,
+            );
             this.logger.debug(`${description} is enabled`);
         } catch (error) {
             this.logger.error(`Check failed: ${description} not enabled: ${describeError(error)}`);
