@@ -15,6 +15,8 @@ import { describeFailure, isServerHang } from '../src/utils/RetryUtils';
 const log = logger.child({ module: 'wdio.shared' });
 
 /** Reasons of the failed attempts of the running test, oldest first (keyed by full title). */
+/** Per-story pass / fail counts for the console STORY END line (keyed by the top-level describe title). */
+const storyCounts = new Map<string, { passed: number; failed: number; other: number }>();
 const failedAttempts = new Map<string, string[]>();
 
 /** Mocha retries for this run: TEST_RETRIES (set by `.\run -Retries`) wins over MOCHA_RETRIES. */
@@ -213,6 +215,33 @@ export const sharedConfig: WebdriverIO.Config = {
         }
     },
 
+    /** Console: a STORY banner before each top-level describe (one user story per spec). */
+    async beforeSuite(suite: { title: string; parent?: string }): Promise<void> {
+        try {
+            if (!suite.parent) {
+                storyCounts.set(suite.title, { passed: 0, failed: 0, other: 0 });
+                logger.info(`[STORY] ${suite.title}`);
+            }
+        } catch (error) {
+            logger.error(`beforeSuite hook failed: ${describeError(error)}`);
+            throw error;
+        }
+    },
+
+    /** Console: the story's totals after its last test. */
+    async afterSuite(suite: { title: string; parent?: string }): Promise<void> {
+        try {
+            const c = storyCounts.get(suite.title);
+            if (!suite.parent && c) {
+                const other = c.other ? `, ${c.other} blocked/skipped` : '';
+                logger.info(`[STORY END] ${suite.title}  :  ${c.passed} passed, ${c.failed} failed${other}`);
+            }
+        } catch (error) {
+            logger.error(`afterSuite hook failed: ${describeError(error)}`);
+            throw error;
+        }
+    },
+
     async beforeTest(test: HookTest): Promise<void> {
         try {
             const id = testCaseIdOf(test.title);
@@ -285,7 +314,13 @@ export const sharedConfig: WebdriverIO.Config = {
                 );
             } else {
                 const word = status === 'Pass' ? 'PASS' : status === 'Blocked' ? 'BLOCKED' : status === 'Skip' ? 'SKIP' : 'FAIL';
-                logger.info(`[TEST END] ${id || test.title} | ${title} | ${word}`);
+                const counts = storyCounts.get(test.parent ?? '');
+                if (counts) {
+                    if (word === 'PASS') counts.passed += 1;
+                    else if (word === 'FAIL') counts.failed += 1;
+                    else counts.other += 1;
+                }
+                logger.info(`[TEST END] ${id || test.title} | ${title} | ${word}`, { durationMs: Math.round(result.duration ?? 0) });
             }
         }
     },

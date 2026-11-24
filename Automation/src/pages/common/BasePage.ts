@@ -58,7 +58,7 @@ export abstract class BasePage {
     // ---- evidence ----
     /** Step screenshot for a submission or popup read another way. Never fails the test. */
     protected async captureScreen(label: string): Promise<void> {
-        this.logger.info(`Capturing the screen: ${label}`);
+        this.logger.debug(`Capturing the screen: ${label}`);
         try {
             await AllureEvidence.step(label);
             this.logger.info(`Screen captured: ${label}`);
@@ -70,7 +70,7 @@ export abstract class BasePage {
     // ---- atomic actions ----
     /** Taps an element; screenshots before a submission tap. */
     async tap(locator: ElementLocator, description: string, timeout: number = TIMEOUTS.standard): Promise<void> {
-        this.logger.info(`Tapping ${description}`);
+        this.logger.debug(`Tapping ${description}`);
         try {
             const el = locator();
             await el.waitForDisplayed({
@@ -80,7 +80,7 @@ export abstract class BasePage {
             });
             if (SUBMIT_ACTION.test(description)) await this.captureScreen(`before ${description}`);
             await el.click();
-            this.logger.info(`Tapped ${description}`);
+            this.logger.debug(`Tapped ${description}`);
         } catch (error) {
             this.logger.error(`Failed to tap ${description}: ${describeError(error)}`);
             throw error;
@@ -94,7 +94,7 @@ export abstract class BasePage {
      * app's own field (the field reads back filled while the app sees it empty).
      */
     async typeWithKeys(locator: ElementLocator, value: string, description: string, secret = false): Promise<void> {
-        this.logger.info(`Typing into ${description} with key presses${secret ? ' (secret)' : ''}`);
+        this.logger.debug(`Typing into ${description} with key presses${secret ? ' (secret)' : ''}`);
         try {
             if (secret) registerSensitive(value);
             const el = locator();
@@ -106,7 +106,7 @@ export abstract class BasePage {
             await el.click();
             await el.clearValue();
             await driver.keys(value.split(''));
-            this.logger.info(`Typed into ${description} with key presses`);
+            this.logger.debug(`Typed into ${description} with key presses`);
         } catch (error) {
             this.logger.error(`Failed to type into ${description} with key presses: ${describeError(error)}`);
             throw error;
@@ -114,7 +114,7 @@ export abstract class BasePage {
     }
 
     async type(locator: ElementLocator, value: string, description: string, secret = false): Promise<void> {
-        this.logger.info(`Typing into ${description}${secret ? ' (secret)' : ''}`);
+        this.logger.debug(`Typing into ${description}${secret ? ' (secret)' : ''}`);
         try {
             if (secret) registerSensitive(value);
             const el = locator();
@@ -126,7 +126,7 @@ export abstract class BasePage {
             await el.click();
             await el.clearValue();
             await el.setValue(value);
-            this.logger.info(`Typed into ${description}`);
+            this.logger.debug(`Typed into ${description}`);
         } catch (error) {
             this.logger.error(`Failed to type into ${description}: ${describeError(error)}`);
             throw error;
@@ -135,12 +135,12 @@ export abstract class BasePage {
 
     /** Clears a field. */
     async clear(locator: ElementLocator, description: string): Promise<void> {
-        this.logger.info(`Clearing ${description}`);
+        this.logger.debug(`Clearing ${description}`);
         try {
             const el = locator();
             await el.waitForDisplayed({ timeout: TIMEOUTS.standard, interval: TIMEOUTS.pollInterval });
             await el.clearValue();
-            this.logger.info(`Cleared ${description}`);
+            this.logger.debug(`Cleared ${description}`);
         } catch (error) {
             this.logger.error(`Failed to clear ${description}: ${describeError(error)}`);
             throw error;
@@ -149,12 +149,12 @@ export abstract class BasePage {
 
     /** Reads an element's text. */
     async textOf(locator: ElementLocator, description: string): Promise<string> {
-        this.logger.info(`Reading the text of ${description}`);
+        this.logger.debug(`Reading the text of ${description}`);
         try {
             const el = locator();
             await el.waitForDisplayed({ timeout: TIMEOUTS.standard, interval: TIMEOUTS.pollInterval });
             const text = await el.getText();
-            this.logger.info(`Read the text of ${description}`);
+            this.logger.debug(`Read the text of ${description}`);
             return text;
         } catch (error) {
             this.logger.error(`Failed to read the text of ${description}: ${describeError(error)}`);
@@ -164,10 +164,10 @@ export abstract class BasePage {
 
     /** Scrolls until the element is in view. */
     async scrollTo(locator: ElementLocator, description: string): Promise<void> {
-        this.logger.info(`Scrolling to ${description}`);
+        this.logger.debug(`Scrolling to ${description}`);
         try {
             await GestureUtils.scrollIntoView(locator, description);
-            this.logger.info(`Scrolled to ${description}`);
+            this.logger.debug(`Scrolled to ${description}`);
         } catch (error) {
             this.logger.error(`Failed to scroll to ${description}: ${describeError(error)}`);
             throw error;
@@ -176,10 +176,10 @@ export abstract class BasePage {
 
     /** Hides the keyboard when shown. */
     async hideKeyboard(): Promise<void> {
-        this.logger.info('Hiding the keyboard');
+        this.logger.debug('Hiding the keyboard');
         try {
             await GestureUtils.hideKeyboard();
-            this.logger.info('Keyboard handled');
+            this.logger.debug('Keyboard handled');
         } catch (error) {
             this.logger.error(`Failed to hide the keyboard: ${describeError(error)}`);
             throw error;
@@ -189,7 +189,7 @@ export abstract class BasePage {
     // ---- polling checks for verify... methods ----
     /** Expects the element to be displayed; captures popups once shown. */
     async expectDisplayed(locator: ElementLocator, description: string, timeout: number = TIMEOUTS.standard): Promise<void> {
-        this.logger.info(`Checking that ${description} is displayed`);
+        this.logger.debug(`Checking that ${description} is displayed`);
         try {
             await expect(locator()).toBeDisplayed({
                 wait: timeout,
@@ -197,7 +197,7 @@ export abstract class BasePage {
                 message: `${description} was not displayed within ${timeout / 1000} s`,
             });
             if (POPUP.test(description)) await this.captureScreen(description);
-            this.logger.info(`${description} is displayed`);
+            this.logger.debug(`${description} is displayed`);
         } catch (error) {
             this.logger.error(`Check failed: ${description} not displayed: ${describeError(error)}`);
             throw error;
@@ -212,12 +212,12 @@ export abstract class BasePage {
         contains = false,
         timeout: number = TIMEOUTS.standard,
     ): Promise<void> {
-        this.logger.info(`Checking the text of ${description}`);
+        this.logger.debug(`Checking the text of ${description}`);
         try {
             const options = { wait: timeout, interval: TIMEOUTS.pollInterval, message: `${description} did not show the expected text` };
             if (contains) await expect(locator()).toHaveText(expect.stringContaining(expected), options);
             else await expect(locator()).toHaveText(expected, options);
-            this.logger.info(`${description} shows the expected text`);
+            this.logger.debug(`${description} shows the expected text`);
         } catch (error) {
             this.logger.error(`Check failed: text of ${description}: ${describeError(error)}`);
             throw error;
@@ -232,14 +232,14 @@ export abstract class BasePage {
         description: string,
         timeout: number = TIMEOUTS.standard,
     ): Promise<void> {
-        this.logger.info(`Checking attribute ${attribute} of ${description}`);
+        this.logger.debug(`Checking attribute ${attribute} of ${description}`);
         try {
             await expect(locator()).toHaveAttribute(attribute, expected, {
                 wait: timeout,
                 interval: TIMEOUTS.pollInterval,
                 message: `${description} ${attribute} differs`,
             });
-            this.logger.info(`${description} has the expected ${attribute}`);
+            this.logger.debug(`${description} has the expected ${attribute}`);
         } catch (error) {
             this.logger.error(`Check failed: attribute ${attribute} of ${description}: ${describeError(error)}`);
             throw error;
@@ -248,14 +248,14 @@ export abstract class BasePage {
 
     /** Expects the element to be enabled. */
     async expectEnabled(locator: ElementLocator, description: string, timeout: number = TIMEOUTS.standard): Promise<void> {
-        this.logger.info(`Checking that ${description} is enabled`);
+        this.logger.debug(`Checking that ${description} is enabled`);
         try {
             await expect(locator()).toBeEnabled({
                 wait: timeout,
                 interval: TIMEOUTS.pollInterval,
                 message: `${description} was not enabled`,
             });
-            this.logger.info(`${description} is enabled`);
+            this.logger.debug(`${description} is enabled`);
         } catch (error) {
             this.logger.error(`Check failed: ${description} not enabled: ${describeError(error)}`);
             throw error;
@@ -264,13 +264,13 @@ export abstract class BasePage {
 
     /** One check that the element is absent; call it only after a positive anchor is displayed. */
     async expectAbsent(locator: ElementLocator, description: string): Promise<void> {
-        this.logger.info(`Checking that ${description} is absent`);
+        this.logger.debug(`Checking that ${description} is absent`);
         try {
             const shown = await locator()
                 .isDisplayed()
                 .catch(() => false);
             if (shown) throw new Error(`${description} is displayed but should be absent`);
-            this.logger.info(`${description} is absent`);
+            this.logger.debug(`${description} is absent`);
         } catch (error) {
             this.logger.error(`Check failed: ${describeError(error)}`);
             throw error;
@@ -283,7 +283,7 @@ export abstract class BasePage {
      * within ms; returns whether it was closed. Logged-in pages call it before their actions and checks.
      */
     async dismissKycPromptIfShown(ms = 1): Promise<boolean> {
-        this.logger.info('Checking for the KYC prompt');
+        this.logger.debug('Checking for the KYC prompt');
         try {
             const later = this.byRole('button', "I'll Do It Later");
             if (!(await this.isDisplayedWithin(later, ms, 'the KYC prompt'))) return false;
@@ -315,7 +315,7 @@ export abstract class BasePage {
      * the check once more. Any other failure is rethrown unchanged.
      */
     async withKycPromptHandled<T>(description: string, check: () => Promise<T>): Promise<T> {
-        this.logger.info(`${description} (KYC prompt handled)`);
+        this.logger.debug(`${description} (KYC prompt handled)`);
         try {
             await this.dismissKycPromptIfShown();
             try {
@@ -333,13 +333,13 @@ export abstract class BasePage {
 
     /** True when the element is displayed within ms (no throw). */
     async isDisplayedWithin(locator: ElementLocator, ms: number, description = 'the element'): Promise<boolean> {
-        this.logger.info(`Checking whether ${description} is shown within ${ms / 1000} s`);
+        this.logger.debug(`Checking whether ${description} is shown within ${ms / 1000} s`);
         try {
             const shown = await locator()
                 .waitForDisplayed({ timeout: ms, interval: TIMEOUTS.pollInterval })
                 .then(() => true)
                 .catch(() => false);
-            this.logger.info(`${description} shown: ${shown}`);
+            this.logger.debug(`${description} shown: ${shown}`);
             return shown;
         } catch (error) {
             this.logger.error(`Failed to check ${description}: ${describeError(error)}`);
@@ -349,10 +349,10 @@ export abstract class BasePage {
 
     /** True when this page's anchor is shown within ms. Pages override anchor(). */
     async isShown(ms: number = TIMEOUTS.short): Promise<boolean> {
-        this.logger.info(`Checking whether ${this.constructor.name} is shown`);
+        this.logger.debug(`Checking whether ${this.constructor.name} is shown`);
         try {
             const shown = await this.isDisplayedWithin(this.anchor(), ms, this.constructor.name);
-            this.logger.info(`${this.constructor.name} shown: ${shown}`);
+            this.logger.debug(`${this.constructor.name} shown: ${shown}`);
             return shown;
         } catch (error) {
             this.logger.error(`Failed to check ${this.constructor.name}: ${describeError(error)}`);
