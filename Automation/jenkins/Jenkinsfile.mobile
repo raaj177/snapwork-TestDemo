@@ -67,7 +67,7 @@ pipeline {
     string(name: 'BUNDLE_ID', defaultValue: '', description: 'iOS bundle ID')
 
     // ---- Credentials (IDs of Jenkins credentials; values never appear in the log) ----
-    string(name: 'ENV_FILE_CREDENTIALS_ID', defaultValue: '', description: 'Secret file credential holding the complete .env (app values, test accounts, Jira); copied to Automation/.env for this build and removed afterwards')
+    string(name: 'ENV_FILE_CREDENTIALS_ID', defaultValue: 'automation-env', description: 'Secret file credential holding the complete .env (app values, test accounts, Jira); copied to Automation/.env for this build and removed afterwards')
     string(name: 'NORMAL_USER_CREDENTIALS_ID', defaultValue: '', description: 'Username with password credential of the normal test account (sets LOGIN_NORMAL_USERNAME / LOGIN_NORMAL_PASSWORD)')
   }
 
