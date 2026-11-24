@@ -50,7 +50,8 @@ pipeline {
     string(name: 'STORIES', defaultValue: '', description: 'regression only: story IDs to run, space or comma separated, e.g. US002 US003 (empty = every story)')
     booleanParam(name: 'SMOKE_GATE', defaultValue: false, description: 'smoke only: run the P0 build gate (smoke:run) with an ACCEPT / REJECT / INCONCLUSIVE decision instead of a plain smoke run')
     booleanParam(name: 'SMOKE_PARTIAL', defaultValue: false, description: 'smoke gate only: run the implemented P0 cases although coverage is incomplete (always INCONCLUSIVE)')
-    choice(name: 'RETRIES', choices: ['0', '1', '2'], description: 'Retries of a failed test (workbook runs)')
+    choice(name: 'RERUN_FAILED', choices: ['1', '0', '2'], description: 'After ALL selected tests have run, run the failed ones again this many times (1 = one more try; the last attempt is the result; Blocked is never rerun)')
+    choice(name: 'RETRIES', choices: ['0', '1', '2'], description: 'Immediate retries of a failed test inside the run (usually 0: RERUN_FAILED reruns at the end instead)')
     string(name: 'TEST_ID', defaultValue: '', description: 'Optional testcase ID(s), comma-separated, e.g. TC_US002_025 (overrides TEST_SUITE)')
     string(name: 'SPEC', defaultValue: '', description: 'Optional spec file, e.g. src/tests/smoke/<WorkbookName>/US002.test.ts (overrides TEST_SUITE; combines with TEST_ID)')
     choice(name: 'PLATFORM', choices: ['android', 'ios'], description: 'Platform to run')
@@ -229,7 +230,7 @@ pipeline {
                       // a per-run report in report/runs/<RUN_ID>/ (+ ZIP). Exit 1 = test failures, 3 = device not ready.
                       def cmd = "npm run ${suite} -- \"${wb}\""
                       if (suite == 'regression' && stories) { cmd += ' ' + stories.join(' ') }
-                      cmd += " --retries ${params.RETRIES}"
+                      cmd += " --retries ${params.RETRIES} --rerun-failed ${params.RERUN_FAILED}"
                       run cmd
                     }
                   }

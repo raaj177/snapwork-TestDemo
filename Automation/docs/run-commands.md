@@ -14,6 +14,7 @@ npm run regression -- "<Approved Workbook>.xlsx" US002 US003 --dry-run
 | story IDs | regression only: `US002 US003` |
 | `--dry-run` | selection + read-only preflight; no session, no report |
 | `--retries <0-5>` | default **0** for these commands |
+| `--rerun-failed <0-2>` | default **1**: after **all** selected tests have run, the failed ones (Fail or no result; never Pass / Blocked / Skip) run once more in a fresh session. The last attempt is the result; Allure shows the earlier attempt under the test's Retries; JUnit keeps only the final attempt. `0` = off |
 | `--strict` | smoke only: exit 6 instead of running when coverage is incomplete |
 | `--update-workbook` | also update the output workbook (`testrun.py update`, once installed) |
 | `--platform android\|ios` | default from `PLATFORM` |

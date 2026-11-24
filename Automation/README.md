@@ -60,7 +60,8 @@ See [docs/framework-architecture.md](docs/framework-architecture.md). Results: `
 | `WORKBOOK` | approved workbook in `testcase/Testcases/` (empty = the only one there) |
 | `STORIES` | regression only: `US002 US003` (empty = every story) |
 | `SMOKE_GATE` / `SMOKE_PARTIAL` | smoke: the P0 build gate with ACCEPT / REJECT / INCONCLUSIVE (`smoke:run`), partial when coverage is incomplete |
-| `RETRIES` | retries of a failed test (0-2) |
+| `RERUN_FAILED` | after **all** tests have run, run the failed ones once more (default `1`; `0` = off); the last attempt is the result, Blocked is never rerun |
+| `RETRIES` | immediate retries inside the run (default `0`) |
 | `TEST_ID` / `SPEC` | direct run of testcase IDs or one spec (overrides `TEST_SUITE`) |
 | `ANDROID_HOME` | SDK folder with `platform-tools/adb` (empty = the agent's variable) |
 | `DEVICE_UDID` | phone serial from `adb devices` (empty = the only connected device) |

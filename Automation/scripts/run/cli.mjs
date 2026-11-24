@@ -8,6 +8,7 @@ import { log } from '../lib/log.mjs';
 import { resolveApprovedWorkbook, testcaseDirOf, UsageError } from '../lib/paths.mjs';
 import { parseRunArgs, USAGE } from './args.mjs';
 import { selectCases, formatSelection } from './select.mjs';
+import { failedIdsOf, junitPrefixOf, dropEarlierAttempts } from './rerun.mjs';
 import { androidPreflight, readDotenv, resolveSetting, PreflightError, mask } from './preflight.mjs';
 import { acquireLock, releaseLock, LockError } from './lock.mjs';
 import { EXIT, newRunId, resultsOf, exitCodeOf } from './outcome.mjs';
@@ -103,8 +104,35 @@ export async function main(argv, deps = {}) {
         for (const s of specs) cliArgs.push('--spec', s);
         cliArgs.push('--mochaOpts.grep', grep);
         const runner = (deps.spawn ?? spawnSync)(process.execPath, cliArgs, { cwd: root, stdio: 'inherit', env: runEnv, shell: false });
-        const runnerExit = runner.status ?? 1;
+        let runnerExit = runner.status ?? 1;
         const selectedIds = sel.selected.map((s) => s.id);
+        // Failed cases once more AFTER the whole run (fresh session, app and back end settled); the last attempt wins.
+        const reruns = [];
+        for (let round = 1; round <= args.rerunFailed; round += 1) {
+            const { latest } = resultsOf(selectedIds, path.join(runDir, 'results.csv'));
+            const failed = failedIdsOf(selectedIds, latest);
+            if (failed.length === 0) break;
+            out(
+                `==== RERUN ${round}/${args.rerunFailed}: ${failed.length} failed case(s) once more after the full run: ${failed.join(' ')} ====`,
+            );
+            const rerunSpecs = [...new Set(sel.selected.filter((s) => failed.includes(s.id)).map((s) => s.file))];
+            const rerunArgs = [wdio, 'run', path.join(root, 'config', `wdio.${args.platform}.conf.ts`)];
+            for (const s of rerunSpecs) rerunArgs.push('--spec', s);
+            rerunArgs.push('--mochaOpts.grep', grepOf(failed));
+            const prefix = junitPrefixOf(round);
+            const rerun = (deps.spawn ?? spawnSync)(process.execPath, rerunArgs, {
+                cwd: root,
+                stdio: 'inherit',
+                env: { ...runEnv, JUNIT_FILE_PREFIX: prefix, MOCHA_RETRIES: '0' },
+                shell: false,
+            });
+            dropEarlierAttempts(path.join(runDir, 'junit'), failed, prefix);
+            const after = resultsOf(selectedIds, path.join(runDir, 'results.csv')).latest;
+            const recovered = failed.filter((id) => after[id] && after[id] !== 'Fail');
+            reruns.push({ round, ids: failed, recovered, stillFailing: failed.filter((id) => !recovered.includes(id)) });
+            out(`==== RERUN ${round} done: ${recovered.length} passed on rerun, ${failed.length - recovered.length} still failing ====`);
+            runnerExit = rerun.status ?? 1;
+        }
         const results = resultsOf(selectedIds, path.join(runDir, 'results.csv'));
         for (const id of results.missing) out(`NO RESULT ${id}`);
         const runJson = {
@@ -117,6 +145,8 @@ export async function main(argv, deps = {}) {
             excludedIds: sel.excluded,
             noResultIds: results.missing,
             retries: args.retries,
+            rerunFailed: args.rerunFailed,
+            reruns,
             platform: args.platform,
             deviceModel: `${facts.model} / Android ${facts.osVersion}`,
             deviceSerial: mask(facts.udid),

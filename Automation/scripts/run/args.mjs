@@ -5,8 +5,8 @@ import { UsageError } from '../lib/paths.mjs';
 const alog = log.child('run-args');
 
 export const USAGE = `Usage:
-  npm run smoke -- "<Approved Workbook>.xlsx" [--dry-run] [--strict] [--retries <0-5>] [--update-workbook] [--platform android|ios]
-  npm run regression -- "<Approved Workbook>.xlsx" [US002 US003 ...] [--dry-run] [--retries <0-5>] [--update-workbook] [--platform android|ios]
+  npm run smoke -- "<Approved Workbook>.xlsx" [--dry-run] [--strict] [--retries <0-5>] [--rerun-failed <0-2>] [--update-workbook] [--platform android|ios]
+  npm run regression -- "<Approved Workbook>.xlsx" [US002 US003 ...] [--dry-run] [--retries <0-5>] [--rerun-failed <0-2>] [--update-workbook] [--platform android|ios]
 The workbook is a file name in testcase/Testcases/ (or a path inside it).`;
 
 /** Parses [type, ...args]. Throws UsageError (exit 2) for anything unexpected. */
@@ -21,6 +21,8 @@ export function parseRunArgs(argv, defaults = {}) {
             stories: [],
             dryRun: false,
             retries: 0,
+            // Failed cases run once more AFTER the whole run (not immediately): default 1 round.
+            rerunFailed: 1,
             strict: false,
             updateWorkbook: false,
             platform: (defaults.platform ?? 'android').toLowerCase(),
@@ -33,11 +35,14 @@ export function parseRunArgs(argv, defaults = {}) {
                 if (type !== 'smoke') throw new UsageError('--strict is a smoke option');
                 out.strict = true;
             } else if (a === '--update-workbook') out.updateWorkbook = true;
-            else if (a === '--retries' || a === '--platform') {
+            else if (a === '--retries' || a === '--platform' || a === '--rerun-failed') {
                 const value = rest[i + 1];
                 if (value === undefined || value.startsWith('--')) throw new UsageError(`${a} needs a value`);
                 i += 1;
-                if (a === '--retries') {
+                if (a === '--rerun-failed') {
+                    if (!/^[0-2]$/.test(value)) throw new UsageError('--rerun-failed must be 0-2');
+                    out.rerunFailed = Number(value);
+                } else if (a === '--retries') {
                     if (!/^[0-5]$/.test(value)) throw new UsageError('--retries must be 0-5');
                     out.retries = Number(value);
                 } else {

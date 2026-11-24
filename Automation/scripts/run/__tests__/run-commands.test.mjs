@@ -396,3 +396,34 @@ test('main(): a run with a missing result exits 4 and writes run.json and the re
     assert.ok(fs.existsSync(path.join(root, 'report', `${runs[0]}.zip`)));
     assert.equal(fs.existsSync(path.join(root, 'test-results', 'runs', '.lock')), false);
 });
+
+test('end-of-run rerun: only Fail / no-result cases are chosen; earlier JUnit attempts are removed; --rerun-failed parses', async () => {
+    const { failedIdsOf, junitPrefixOf, dropEarlierAttempts } = await import('../rerun.mjs');
+    assert.deepEqual(
+        failedIdsOf(['TC_A_1', 'TC_A_2', 'TC_A_3', 'TC_A_4', 'TC_A_5'], {
+            TC_A_1: 'Pass',
+            TC_A_2: 'Fail',
+            TC_A_3: 'Blocked',
+            TC_A_4: 'Skip',
+        }),
+        ['TC_A_2', 'TC_A_5'],
+    );
+    assert.equal(junitPrefixOf(0), '');
+    assert.equal(junitPrefixOf(1), 'rerun1-');
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'junit-'));
+    const first =
+        '<testsuites><testsuite>\n' +
+        '    <testcase classname="c" name="TC US002 025 Mobile tab" time="1"><failure message="x"/></testcase>\n' +
+        '    <testcase classname="c" name="TC US002 027 Default tab" time="1"/>\n' +
+        '</testsuite></testsuites>\n';
+    fs.writeFileSync(path.join(dir, 'results-0-0.xml'), first);
+    fs.writeFileSync(path.join(dir, 'rerun1-results-0-0.xml'), '<testcase classname="c" name="TC US002 025 Mobile tab" time="1"/>\n');
+    assert.equal(dropEarlierAttempts(dir, ['TC_US002_025'], 'rerun1-'), 1);
+    const after = fs.readFileSync(path.join(dir, 'results-0-0.xml'), 'utf8');
+    assert.doesNotMatch(after, /TC US002 025/);
+    assert.match(after, /TC US002 027/);
+    assert.match(fs.readFileSync(path.join(dir, 'rerun1-results-0-0.xml'), 'utf8'), /TC US002 025/);
+    assert.equal(parseRunArgs(['smoke', 'W.xlsx']).rerunFailed, 1);
+    assert.equal(parseRunArgs(['smoke', 'W.xlsx', '--rerun-failed', '0']).rerunFailed, 0);
+    assert.throws(() => parseRunArgs(['smoke', 'W.xlsx', '--rerun-failed', '3']), /0-2/);
+});

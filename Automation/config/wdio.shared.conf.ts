@@ -196,7 +196,8 @@ export const sharedConfig: WebdriverIO.Config = {
             'junit',
             {
                 outputDir: path.resolve(FRAMEWORK_ROOT, env.JUNIT_DIR),
-                outputFileFormat: (options: { cid: string }) => `results-${options.cid}.xml`,
+                // JUNIT_FILE_PREFIX: set by the end-of-run rerun (scripts/run/rerun.mjs) so a rerun never overwrites the first run's files.
+                outputFileFormat: (options: { cid: string }) => `${process.env.JUNIT_FILE_PREFIX ?? ''}results-${options.cid}.xml`,
             },
         ],
     ],
