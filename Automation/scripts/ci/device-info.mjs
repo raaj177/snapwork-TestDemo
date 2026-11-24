@@ -142,6 +142,9 @@ export function main(argv = process.argv.slice(2), env = process.env) {
         const devices = parseAdbDevices(adb(exe, ['devices']));
         const serial = pickDevice(devices, udid);
         const d = deviceDetails(exe, serial, appPackage);
+        // Saved for the Allure Environment panel (npm run report:ci); the serial stays masked.
+        fs.mkdirSync(path.join(ROOT, 'test-results'), { recursive: true });
+        fs.writeFileSync(path.join(ROOT, 'test-results', 'device.json'), `${JSON.stringify(d, null, 2)}\n`, 'utf8');
         console.log('================ DEVICE ================');
         console.log(`Serial     : ${d.serial}${udid ? ' (DEVICE_UDID)' : ' (only online device)'}`);
         console.log(`Device     : ${d.manufacturer} ${d.model}`);

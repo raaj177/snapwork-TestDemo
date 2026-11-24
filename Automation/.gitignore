@@ -15,6 +15,7 @@ node_modules/
 /screenshots/
 /report/
 /reports/
+/.allure-history/
 
 # ---- Run results written into the testcase folder (keep the folders, not the files) ----
 testcase/Output Testcases/*

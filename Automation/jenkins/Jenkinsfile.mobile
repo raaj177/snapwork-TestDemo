@@ -92,7 +92,12 @@ pipeline {
           if (sdk) { env.ANDROID_HOME = sdk; env.ANDROID_SDK_ROOT = sdk }
         }
         dir(AUTOMATION_DIR) {
-          script { run 'npm run clean --if-present' }
+          script {
+            run 'npm run clean --if-present'
+            // The previous build's runs are archived with that build: start this build's report from its own runs only
+            // (.allure-history/ is kept for the Trend graph).
+            run "node -e \"for (const d of ['test-results/runs', 'test-results/ci-allure-results', 'reports/smoke', 'report']) require('fs').rmSync(d, { recursive: true, force: true })\""
+          }
         }
       }
     }
@@ -243,8 +248,10 @@ pipeline {
       junit allowEmptyResults: true, testResults: "${AUTOMATION_DIR}/test-results/**/junit/*.xml"
       dir(AUTOMATION_DIR) {
         script {
-          // Allure for direct / integration / gate runs (workbook runs build their own report under report/runs/).
-          try { run 'npm run report' } catch (ignored) { echo 'Allure report not generated (no allure-results in this build).' }
+          // ONE Allure report of every run in this build (smoke / regression / integration / direct): Overview with
+          // Environment (device, app version, workbook), Categories, Executor and Trend; Behaviors epic > feature > story;
+          // each test with its steps, step screenshots, failure screenshot, page source and log; Logger + Screenshots tabs.
+          try { run 'npm run report:ci' } catch (ignored) { echo 'Allure report not generated (no Allure results in this build).' }
           // Never leave the secret .env on the agent.
           if (params.ENV_FILE_CREDENTIALS_ID?.trim()) { run(isUnix() ? 'rm -f .env' : 'if exist .env del /F /Q .env') }
         }

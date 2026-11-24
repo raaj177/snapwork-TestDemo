@@ -54,7 +54,6 @@ pipeline {
     string(name: 'TEST_ID', defaultValue: '', description: 'Optional testcase ID(s), comma-separated, e.g. TC_US002_025 (overrides TEST_SUITE)')
     string(name: 'SPEC', defaultValue: '', description: 'Optional spec file, e.g. src/tests/smoke/<WorkbookName>/US002.test.ts (overrides TEST_SUITE; combines with TEST_ID)')
     choice(name: 'PLATFORM', choices: ['android', 'ios'], description: 'Platform to run')
-    choice(name: 'TEST_ENV', choices: ['qa', 'uat', 'staging'], description: 'Target environment (config/environments)')
 
     // ---- Device ----
     string(name: 'ANDROID_HOME', defaultValue: '', description: 'Android: SDK folder that contains platform-tools/adb (empty = the agent\'s ANDROID_HOME / ANDROID_SDK_ROOT)')
@@ -75,7 +74,7 @@ pipeline {
   environment {
     CI = 'true'
     PLATFORM = "${params.PLATFORM}"
-    TEST_ENV = "${params.TEST_ENV}"
+    TEST_ENV = 'qa'   // the project's only environment
     LOG_LEVEL = 'info'
   }
 
@@ -93,7 +92,12 @@ pipeline {
           if (sdk) { env.ANDROID_HOME = sdk; env.ANDROID_SDK_ROOT = sdk }
         }
         dir(AUTOMATION_DIR) {
-          script { run 'npm run clean --if-present' }
+          script {
+            run 'npm run clean --if-present'
+            // The previous build's runs are archived with that build: start this build's report from its own runs only
+            // (.allure-history/ is kept for the Trend graph).
+            run "node -e \"for (const d of ['test-results/runs', 'test-results/ci-allure-results', 'reports/smoke', 'report']) require('fs').rmSync(d, { recursive: true, force: true })\""
+          }
         }
       }
     }
@@ -244,8 +248,10 @@ pipeline {
       junit allowEmptyResults: true, testResults: "${AUTOMATION_DIR}/test-results/**/junit/*.xml"
       dir(AUTOMATION_DIR) {
         script {
-          // Allure for direct / integration / gate runs (workbook runs build their own report under report/runs/).
-          try { run 'npm run report' } catch (ignored) { echo 'Allure report not generated (no allure-results in this build).' }
+          // ONE Allure report of every run in this build (smoke / regression / integration / direct): Overview with
+          // Environment (device, app version, workbook), Categories, Executor and Trend; Behaviors epic > feature > story;
+          // each test with its steps, step screenshots, failure screenshot, page source and log; Logger + Screenshots tabs.
+          try { run 'npm run report:ci' } catch (ignored) { echo 'Allure report not generated (no Allure results in this build).' }
           // Never leave the secret .env on the agent.
           if (params.ENV_FILE_CREDENTIALS_ID?.trim()) { run(isUnix() ? 'rm -f .env' : 'if exist .env del /F /Q .env') }
         }

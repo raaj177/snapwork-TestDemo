@@ -29,7 +29,8 @@
         "report:share": "node scripts/report/build-share-report.mjs",
         "report:share:test": "node --test scripts/report/__tests__/*.test.mjs",
         "clean": "node scripts/clean.mjs",
-        "ci:device": "node scripts/ci/device-info.mjs"
+        "ci:device": "node scripts/ci/device-info.mjs",
+        "report:ci": "node scripts/ci/build-allure.mjs"
     },
     "devDependencies": {
         "@faker-js/faker": "10.6.0",
