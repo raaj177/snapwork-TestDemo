@@ -4,7 +4,9 @@
 // Speed (REUSE_APP_STATE, default on): the screen the previous test left is reused when it is a known, verifiably
 // clean start state (login screen reset in place, returning-user screen, live Dashboard session); anything else
 // relaunches. A reused session skips logout + login.
-import { env } from '../../config/env';
+import fs from 'node:fs';
+import path from 'node:path';
+import { env, FRAMEWORK_ROOT } from '../../config/env';
 import { TIMEOUTS } from '../constants/timeouts';
 import { fixtures } from '../fixtures/test-data.fixture';
 import {
@@ -23,7 +25,27 @@ import { describeError, logger } from '../utils/Logger';
 import { appService } from './app.service';
 
 export type StartScreen = 'login' | 'returning' | 'dashboard' | 'kyc';
-export type LoginOutcome = 'dashboard' | 'kyc' | 'failed';
+export type LoginOutcome = 'dashboard' | 'kyc' | 'failed' | 'recovery';
+
+/**
+ * Run-wide stop for logins of the normal test account. Written when a login fails, asks for an OTP or gets no answer;
+ * read by every worker (one per spec file), so one bad login never turns into more failed attempts (the account locks
+ * after 5). It expires after 2 hours; delete it once the account is usable again.
+ */
+const LOGIN_STOP_FILE = path.join(FRAMEWORK_ROOT, 'test-results', 'login-unavailable.json');
+const LOGIN_STOP_MS = 2 * 3600 * 1000;
+
+/** Why logins are stopped for this run, or '' (no marker, or an expired one). */
+export function loginStopReason(): string {
+    try {
+        if (!fs.existsSync(LOGIN_STOP_FILE)) return '';
+        const data = JSON.parse(fs.readFileSync(LOGIN_STOP_FILE, 'utf8')) as { reason?: string; at?: string };
+        if (Date.now() - new Date(data.at ?? 0).getTime() >= LOGIN_STOP_MS) return '';
+        return `${data.reason ?? 'Logins are stopped'} (marker: test-results/login-unavailable.json)`;
+    } catch {
+        return ''; // an unreadable marker counts as absent
+    }
+}
 
 export class StartService {
     protected readonly logger = logger.child({ service: 'StartService' });
@@ -131,6 +153,24 @@ export class StartService {
         }
     }
 
+    /** Stops every later login of this run (all workers, via test-results/login-unavailable.json) and blocks the test. */
+    stopLogins(reason: string): never {
+        this.logger.error(`Logins stopped: ${reason}`);
+        this.loginUnavailable = reason;
+        try {
+            fs.mkdirSync(path.dirname(LOGIN_STOP_FILE), { recursive: true });
+            fs.writeFileSync(
+                LOGIN_STOP_FILE,
+                `${JSON.stringify({ reason, at: new Date().toISOString() }, null, 2)}
+`,
+                'utf8',
+            );
+        } catch (writeError) {
+            this.logger.warn(`Could not write ${LOGIN_STOP_FILE}: ${describeError(writeError)}`);
+        }
+        throw new BlockedError(reason);
+    }
+
     /** After Login is tapped: polls until the Dashboard, the KYC prompt or the back-end "Login Failed" sheet is shown. */
     async waitForLoginOutcome(timeout: number = TIMEOUTS.backendResponse): Promise<LoginOutcome> {
         this.logger.info('Waiting for the login result (Dashboard, KYC prompt or "Login Failed")');
@@ -140,6 +180,8 @@ export class StartService {
                 async () => {
                     if (await this.loginPage.isDisplayedWithin(this.loginPage.loginFailedSheet, 1, 'the "Login Failed" sheet'))
                         outcome = 'failed';
+                    else if (await this.loginPage.isDisplayedWithin(this.loginPage.otpLabel, 1, 'the OTP field (failed-attempt recovery)'))
+                        outcome = 'recovery';
                     else if (await this.kycPromptPage.isDisplayedWithin(this.kycPromptPage.doItLaterButton, 1, 'the KYC prompt'))
                         outcome = 'kyc';
                     else if (await this.dashboardPage.isDisplayedWithin(this.dashboardPage.moreTab, 1, 'the Dashboard tab bar'))
@@ -263,11 +305,17 @@ export class StartService {
                 this.logger.info('Session reused; Dashboard shown (no new login)');
                 return;
             }
-            if (this.loginUnavailable) throw new BlockedError(this.loginUnavailable);
+            const stopped = this.loginUnavailable || loginStopReason();
+            if (stopped) throw new BlockedError(stopped);
             const user = fixtures.user('normalUser');
             if (screen === 'returning') await this.switchAccountToLogin();
             else if (!(await this.tryResetLoginInPlace())) await this.openCustomerIdLogin();
             await this.loginPage.verifyCustomerIdView();
+            // An OTP field already on the form means 3+ failed attempts: another wrong submission could lock the account.
+            if (await this.loginPage.isDisplayedWithin(this.loginPage.otpLabel, 1000, 'the OTP field (failed-attempt recovery)'))
+                this.stopLogins(
+                    'The login form asks for an OTP (failed-attempt recovery after 3+ failed logins of the normal test account). Login was not submitted. Log in once by hand with the OTP, confirm the password in .env / automation-env, then delete test-results/login-unavailable.json.',
+                );
             try {
                 await this.loginPage.loginWithCustomerId(user.username, user.password ?? '');
             } catch (formError) {
@@ -279,13 +327,24 @@ export class StartService {
                 await this.openCustomerIdLoginByRelaunch();
                 await this.loginPage.loginWithCustomerId(user.username, user.password ?? '');
             }
-            const outcome = await this.waitForLoginOutcome();
-            if (outcome === 'failed') {
-                // Never tap "Try Again" (it would submit again): the next test relaunches, and no later test logs in.
-                this.loginUnavailable =
-                    'The back end refused the normal test account\'s login in this run ("Login Failed - Something went wrong. Please try again later."); no further login is attempted, to protect the account.';
-                throw new BlockedError(this.loginUnavailable);
+            let outcome: LoginOutcome;
+            try {
+                outcome = await this.waitForLoginOutcome();
+            } catch (noAnswer) {
+                // Submitted, but the result is unknown: stop rather than risk more failed attempts.
+                this.stopLogins(
+                    `The login was submitted but no result was shown (${describeError(noAnswer)}); no further login is attempted, to protect the account.`,
+                );
             }
+            // Never tap "Try Again" (it would submit again).
+            if (outcome === 'failed')
+                this.stopLogins(
+                    'The back end refused the normal test account\'s login ("Login Failed - Something went wrong. Please try again later."); no further login is attempted, to protect the account.',
+                );
+            if (outcome === 'recovery')
+                this.stopLogins(
+                    'After Login the app asked for an OTP (failed-attempt recovery after 3+ failed logins of the normal test account). Check the password in .env / automation-env, log in once by hand with the OTP, then delete test-results/login-unavailable.json.',
+                );
             if (outcome === 'kyc') await this.kycPromptPage.tapDoItLater();
             await this.dashboardPage.verifyVisible();
             await this.kycPromptPage.dismissIfShown(TIMEOUTS.short);

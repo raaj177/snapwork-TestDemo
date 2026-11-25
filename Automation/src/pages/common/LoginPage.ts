@@ -34,6 +34,8 @@ export abstract class LoginPage extends BasePage {
     readonly signUpNowLink: ElementLocator;
     /** Bottom sheet the back end returns when it cannot log in ("Login Failed" + "Something went wrong..."). */
     readonly loginFailedSheet: ElementLocator;
+    /** "OTP" label of the failed-attempt recovery view (shown after 3 failed logins; the account locks at 5). */
+    readonly otpLabel: ElementLocator;
     // Platform-specific (TalkBack tab wording, EditText class): assigned in src/pages/android|ios/LoginPage.ts
     abstract readonly customerIdTab: ElementLocator;
     abstract readonly mobileNoTab: ElementLocator;
@@ -58,6 +60,7 @@ export abstract class LoginPage extends BasePage {
         this.loginButton = this.byRole('button', 'Login');
         this.noAccountText = this.byLabel("Don't have an account?");
         this.signUpNowLink = this.byRole('button', 'Sign up now');
+        this.otpLabel = this.byLabel('OTP');
         this.loginFailedSheet = this.byXPath('//*[contains(@content-desc, "Login Failed") or contains(@text, "Login Failed")]');
     }
 
