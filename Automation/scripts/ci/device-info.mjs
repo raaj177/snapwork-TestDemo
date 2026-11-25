@@ -32,7 +32,7 @@ export function adbPath(env = process.env) {
 export function adb(exe, args) {
     dlog.debug(`adb ${args[0] === '-s' ? args.slice(2).join(' ') : args.join(' ')}`);
     try {
-        const r = spawnSync(exe, args, { encoding: 'utf8', shell: false, timeout: 30000 });
+        const r = spawnSync(exe, args, { encoding: 'utf8', shell: false, timeout: args.includes('install') ? 300000 : 30000 }); // an install can take minutes
         if (r.error) throw r.error;
         if (r.status !== 0) throw new Error(`adb ${args.join(' ')} exited ${r.status}: ${(r.stderr || '').trim()}`);
         return (r.stdout || '').trim();
@@ -124,13 +124,48 @@ export function launchApp(exe, serial, appPackage) {
     }
 }
 
+/** The .apk to install: the file itself, or the only .apk in a folder (Jenkins copies the build job's artifact there). */
+export function resolveApk(target) {
+    dlog.info(`Resolving the app build in ${target}`);
+    try {
+        const full = path.resolve(ROOT, target);
+        if (!fs.existsSync(full)) throw new Error(`App build not found: ${target}`);
+        if (fs.statSync(full).isFile()) return full;
+        const apks = fs.readdirSync(full).filter((f) => f.toLowerCase().endsWith('.apk'));
+        if (apks.length !== 1)
+            throw new Error(`Expected exactly one .apk in ${target}, found ${apks.length}: ${apks.join(', ') || 'none'}`);
+        return path.join(full, apks[0]);
+    } catch (error) {
+        dlog.error(`Resolving the app build failed: ${log.describe(error)}`);
+        throw error;
+    }
+}
+
+/** Installs (or upgrades, keeping the app's data) the build on the device with adb install -r. */
+export function installApk(exe, serial, apk) {
+    dlog.info(`Installing ${path.basename(apk)} on the device`);
+    try {
+        console.log(`Installing : ${path.basename(apk)} (adb install -r, app data kept)`);
+        const result = adb(exe, ['-s', serial, 'install', '-r', apk]);
+        if (!/Success/.test(result)) throw new Error(`adb install did not report Success: ${result.split(/\r?\n/).pop()}`);
+        console.log('Installed  : Success');
+    } catch (error) {
+        dlog.error(`Installing the app build failed: ${log.describe(error)}`);
+        throw error;
+    }
+}
+
 /** CLI entry: prints the details; exit 0 ready, 3 not ready, 2 usage. */
 export function main(argv = process.argv.slice(2), env = process.env) {
     dlog.info('Device check started');
     try {
-        const unknown = argv.filter((a) => a !== '--launch-app');
-        if (unknown.length) {
-            console.error(`Unknown argument(s): ${unknown.join(' ')}\nUsage: npm run ci:device [-- --launch-app]`);
+        const installIndex = argv.indexOf('--install');
+        const installTarget = installIndex >= 0 ? argv[installIndex + 1] : undefined;
+        const unknown = argv.filter((a, i) => a !== '--launch-app' && a !== '--install' && !(installIndex >= 0 && i === installIndex + 1));
+        if (unknown.length || (installIndex >= 0 && !installTarget)) {
+            console.error(
+                `Unknown argument(s): ${unknown.join(' ')}\nUsage: npm run ci:device [-- [--install <apk or folder>] [--launch-app]]`,
+            );
             return 2;
         }
         const dotenv = readDotenv(path.join(ROOT, '.env'));
@@ -141,6 +176,7 @@ export function main(argv = process.argv.slice(2), env = process.env) {
         console.log(`adb version: ${adb(exe, ['version']).split(/\r?\n/)[0]}`);
         const devices = parseAdbDevices(adb(exe, ['devices']));
         const serial = pickDevice(devices, udid);
+        if (installTarget) installApk(exe, serial, resolveApk(installTarget));
         const d = deviceDetails(exe, serial, appPackage);
         // Saved for the Allure Environment panel (npm run report:ci); the serial stays masked.
         fs.mkdirSync(path.join(ROOT, 'test-results'), { recursive: true });

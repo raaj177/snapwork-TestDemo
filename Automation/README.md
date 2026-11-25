@@ -52,7 +52,7 @@ See [docs/framework-architecture.md](docs/framework-architecture.md). Results: `
 
 ## Jenkins
 
-`jenkins/Jenkinsfile.mobile`: create a **Pipeline** job, "Pipeline script from SCM", **Script Path** `Automation/jenkins/Jenkinsfile.mobile`. Plugins: NodeJS (tool name `NodeJS-24`), JUnit, HTML Publisher, Timestamper, Credentials Binding. The job's agent must be **the machine the phone is attached to over USB** (iOS: a macOS agent with Xcode).
+`jenkins/Jenkinsfile.mobile`: create a **Pipeline** job, "Pipeline script from SCM", **Script Path** `Automation/jenkins/Jenkinsfile.mobile`. Plugins: NodeJS (tool name `NodeJS-24`), JUnit, HTML Publisher, Timestamper, Credentials Binding, Copy Artifact (only for `APP_BUILD_JOB`; the build job must grant this job *Copy Artifact* permission). The job's agent must be **the machine the phone is attached to over USB** (iOS: a macOS agent with Xcode).
 
 | Parameter | Use |
 | --- | --- |
@@ -66,6 +66,7 @@ See [docs/framework-architecture.md](docs/framework-architecture.md). Results: `
 | `ANDROID_HOME` | SDK folder with `platform-tools/adb` (empty = the agent's variable) |
 | `DEVICE_UDID` | phone serial from `adb devices` (empty = the only connected device) |
 | `LAUNCH_APP` | bring the app to the foreground before the tests (default on) |
+| `APP_BUILD_JOB`, `APP_BUILD_NUMBER`, `APP_ARTIFACT_FILTER` | take the app from **another Jenkins job's artifact** (built on any node): the **App build** stage copies the `.apk` with the Copy Artifact plugin (last successful build, or the given number) into `apps/android/` and installs it on the phone (`adb install -r`, data kept). Empty = test the app already on the phone |
 | `APP_PACKAGE`, `APP_ACTIVITY`, `APP_PATH`, `BUNDLE_ID` | app values (empty = from the `.env` file credential) |
 | `ENV_FILE_CREDENTIALS_ID` | Jenkins **Secret file** credential holding a complete `.env`; copied for the build, deleted afterwards |
 | `NORMAL_USER_CREDENTIALS_ID` | Jenkins **Username with password** credential of the normal test account |

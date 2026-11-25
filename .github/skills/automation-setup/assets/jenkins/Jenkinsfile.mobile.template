@@ -60,6 +60,11 @@ pipeline {
     string(name: 'DEVICE_UDID', defaultValue: '', description: 'Device serial from `adb devices` (no spaces); empty = the only connected device')
     booleanParam(name: 'LAUNCH_APP', defaultValue: true, description: 'Bring the app to the foreground before the tests (the workbook runs require the app open on the phone)')
 
+    // ---- App build from another Jenkins job / node (Copy Artifact plugin) ----
+    string(name: 'APP_BUILD_JOB', defaultValue: '', description: 'Jenkins job that builds the app and archives the .apk (it can run on any other node), e.g. folder/android-app-build; empty = test the app already installed on the phone')
+    string(name: 'APP_BUILD_NUMBER', defaultValue: '', description: 'Build number of APP_BUILD_JOB to test; empty = its last successful build')
+    string(name: 'APP_ARTIFACT_FILTER', defaultValue: '**/*.apk', description: 'Which archived file of that build is the app (exactly one must match)')
+
     // ---- App (empty = value from the .env file credential) ----
     string(name: 'APP_PACKAGE', defaultValue: '', description: 'Android app package')
     string(name: 'APP_ACTIVITY', defaultValue: '', description: 'Android launch activity')
@@ -153,6 +158,32 @@ pipeline {
             def installed = out('npx appium driver list --installed 2>&1')
             echo installed
             if (!installed.contains(driver)) { error "Appium driver ${driver} is not installed: it is a project dependency, check that npm ci succeeded." }
+          }
+        }
+      }
+    }
+
+    stage('App build') {
+      // Takes the .apk that ANOTHER Jenkins job archived (built on its own node) and installs it on this agent's phone.
+      // Needs the Copy Artifact plugin, and the build job must allow this job to copy (Copy Artifact permission).
+      when { expression { params.APP_BUILD_JOB?.trim() } }
+      steps {
+        dir(AUTOMATION_DIR) {
+          script {
+            if (params.PLATFORM != 'android') { error 'APP_BUILD_JOB installs Android builds (.apk); for iOS install the .ipa on the agent first.' }
+            run "node -e \"const fs = require('fs'); fs.mkdirSync('apps/android', { recursive: true }); for (const f of fs.readdirSync('apps/android')) if (f.endsWith('.apk')) fs.unlinkSync('apps/android/' + f)\""
+            def selector = params.APP_BUILD_NUMBER?.trim() ? specific(params.APP_BUILD_NUMBER.trim()) : lastSuccessful()
+            copyArtifacts(
+              projectName: params.APP_BUILD_JOB.trim(),
+              selector: selector,
+              filter: params.APP_ARTIFACT_FILTER,
+              target: 'apps/android',
+              flatten: true,
+              fingerprintArtifacts: true
+            )
+            echo "App build copied from ${params.APP_BUILD_JOB.trim()} #${params.APP_BUILD_NUMBER?.trim() ?: 'lastSuccessful'}"
+            // adb install -r: installs or upgrades the build, keeping the app's data; prints the installed version.
+            run 'npm run ci:device -- --install apps/android'
           }
         }
       }
