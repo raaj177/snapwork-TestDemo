@@ -32,7 +32,9 @@ def out(String command) {
 }
 
 pipeline {
-  agent any
+  // Runs only on an agent labelled AGENT_LABEL (default android-device): the machine with the phone on USB.
+  // A shared Jenkins can never start the run on a server without a device.
+  agent { label "${params.AGENT_LABEL ?: 'android-device'}" }
 
   tools { nodejs '{{JENKINS_NODEJS_TOOL}}' }
 
@@ -57,6 +59,7 @@ pipeline {
 
     // ---- Device ----
     string(name: 'ANDROID_HOME', defaultValue: '', description: 'Android: SDK folder that contains platform-tools/adb (empty = the agent\'s ANDROID_HOME / ANDROID_SDK_ROOT)')
+    string(name: 'AGENT_LABEL', defaultValue: 'android-device', description: 'Jenkins agent label of the machine the phone is connected to (USB)')
     string(name: 'DEVICE_UDID', defaultValue: '', description: 'Device serial from `adb devices` (no spaces); empty = the only connected device')
     booleanParam(name: 'LAUNCH_APP', defaultValue: true, description: 'Bring the app to the foreground before the tests (the workbook runs require the app open on the phone)')
 
